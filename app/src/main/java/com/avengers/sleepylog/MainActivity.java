@@ -50,7 +50,11 @@ public class MainActivity extends AppCompatActivity
 
         // Above created by Android Studio Navigation Drawer Activity template
         sleepButtonState = 0;
-        sleepButtonStrings = new String[] {"Time to Bed","Time to Sleep","Time Wake Up","Time Out of Bed"};
+        String bedtime = getString(R.string.time_to_bed);
+        String sleepTime = getString(R.string.time_to_sleep);
+        String wakeUpTime = getString(R.string.time_to_wake);
+        String outBedTime = getString(R.string.time_out_of_bed);
+        sleepButtonStrings = new String[] {bedtime, sleepTime, wakeUpTime, outBedTime};
         btnSleep = (Button) findViewById(R.id.btnSleep);
         btnSleep.setText(sleepButtonStrings[sleepButtonState]);
         btnBack = (Button) findViewById(R.id.btnBack);

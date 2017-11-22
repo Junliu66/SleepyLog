@@ -12,7 +12,7 @@
         android:id="@+id/tvMainWelcom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to SleepyLog"
+        android:text="@string/welcome_msg"
         android:textAppearance="@android:style/TextAppearance.Material.Large" />
 
     <Button
@@ -23,7 +23,7 @@
         android:layout_marginEnd="148dp"
         android:layout_marginStart="148dp"
         android:layout_marginTop="200dp"
-        android:text="Time To Bed"
+        android:text="@string/time_to_bed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
-        android:text="Back"
+        android:text="@string/back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:onClick="onBackButton"/>

@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 /**
- * Dysplay
+ * Display
  */
 public class DisplayDataActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

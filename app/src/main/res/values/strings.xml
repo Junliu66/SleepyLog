@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">Sleepy Log</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -8,4 +9,22 @@
     <string name="title_activity_questions">QuestionsActivity</string>
     <string name="title_activity_edit_data">EditDataActivity</string>
     <string name="title_activity_display_data">DisplayDataActivity</string>
+    <string name="m_import">Import</string>
+    <string name="m_gallery">Gallery</string>
+    <string name="m_slideshow">Slideshow</string>
+    <string name="m_tools">Tools</string>
+    <string name="m_communicate">Communicate</string>
+    <string name="m_share">Share</string>
+    <string name="m_send">Send</string>
+    <string name="answer_questions">Please Answer the following questions:</string>
+    <string name="back">Back</string>
+    <string name="done">Done</string>
+    <string name="welcome_msg">Welcome to SleepyLog</string>
+    <string name="time_to_bed">Time To Bed</string>
+    <string name="time_to_wake">Time ToWake Up</string>
+    <string name="time_to_sleep">Time To Sleep</string>
+    <string name="time_out_of_bed">Time Out of Bed</string>
+    <string name="avengers">Team Avengers</string>
+    <string name="team_members">Kevin Ball, Victoria Larina, Junliu Zhang</string>
+
 </resources>

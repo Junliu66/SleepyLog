@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Сонный журнал</string>
+
+    <string name="navigation_drawer_open">Открыть панель навигации</string>
+    <string name="navigation_drawer_close">Закрыть панель навигации</string>
+
+    <string name="action_settings">Настройки</string>
+    <string name="title_activity_questions">Вопросы</string>
+    <string name="title_activity_edit_data">Редактирование данных</string>
+    <string name="title_activity_display_data">Ваши данные</string>
+    <string name="m_import">Импортировать</string>
+    <string name="m_gallery">Галлерея</string>
+    <string name="m_slideshow">Слайды</string>
+    <string name="m_tools">Интсрументы</string>
+    <string name="m_communicate">Сообщить</string>
+    <string name="m_share">Поделиться</string>
+    <string name="m_send">Послать</string>
+    <string name="answer_questions">Пожалуйста, ответьте на следующие вопросы:</string>
+    <string name="back">Вернуться</string>
+    <string name="done">Готово</string>
+    <string name="welcome_msg">Добро пожаловать в "Сонный Журнал"</string>
+    <string name="time_to_bed">Время укладываться в кровать</string>
+    <string name="time_to_wake">Время просыпаться</string>
+    <string name="time_to_sleep">Время ложиться спать</string>
+    <string name="time_out_of_bed">Время вставать</string>
+    <string name="avengers">Команда мстителей</string>
+    <string name="team_members">Кевин Болл, Виктория Ларина, Джунлиу Цзанг</string>
+
+</resources>
