@@ -1,5 +1,6 @@
 package com.avengers.sleepylog;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.Date;
 
 public class EditDataActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,9 +49,12 @@ public class EditDataActivity extends AppCompatActivity
     }
 
     public void onEditDataDone(View view) {
-        Intent mainIntent = new Intent(this,MainActivity.class);
+        //Intent mainIntent = new Intent(this,MainActivity.class);
         // questionsIntent.putExtras(...);
-        startActivity(mainIntent);
+        //startActivity(mainIntent);
+        //this.finish();
+        Intent returnIntent = getIntent();
+        setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
     }
 

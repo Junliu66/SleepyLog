@@ -1,5 +1,6 @@
 package com.avengers.sleepylog;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,14 +15,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    static final int MAIN_ACTIVITY_CODE = 1;
+
+    Date date;
+    TextView tvDate;
+    TextView tvSleepButtonState;
     Button btnSleep;
     Button btnBack;
     int sleepButtonState = 0;
     String sleepButtonStrings[];
+    TextView[] tvTimes;
+    Date[] times;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +63,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Above created by Android Studio Navigation Drawer Activity template
+        tvDate = (TextView) findViewById(R.id.tvDate);
+        tvSleepButtonState = (TextView) findViewById(R.id.tvSleepButtonState);
         sleepButtonState = 0;
         String bedtime = getString(R.string.time_to_bed);
         String sleepTime = getString(R.string.time_to_sleep);
@@ -62,22 +78,52 @@ public class MainActivity extends AppCompatActivity
         btnBack.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                sleepButtonState = 0;
-                btnSleep.setText(sleepButtonStrings[sleepButtonState]);
-                btnBack.setVisibility(View.INVISIBLE);
+                resetSleepButtonState();
                 return true;
             }
         });
+        TextView tvTime0 = (TextView) findViewById(R.id.tvTime0);
+        TextView tvTime1 = (TextView) findViewById(R.id.tvTime1);
+        TextView tvTime2 = (TextView) findViewById(R.id.tvTime2);
+        TextView tvTime3 = (TextView) findViewById(R.id.tvTime3);
+        tvTimes = new TextView[] {tvTime0,tvTime1,tvTime2,tvTime3};
+        times = new Date[4];
 
+        resetSleepButtonState();
+    }
+
+    public void resetSleepButtonState() {
+        date = Calendar.getInstance().getTime();
+        String dateStr = DateFormat.getDateInstance().format(date);
+        tvDate.setText(dateStr);
+        sleepButtonState = 0;
+        tvSleepButtonState.setText("state: " + sleepButtonState);
+        btnSleep.setText(sleepButtonStrings[sleepButtonState]);
+        btnBack.setVisibility(View.INVISIBLE);
+        for (int i=0; i<4; i++) {
+            tvTimes[i].setText("");
+            tvTimes[i].setVisibility(View.INVISIBLE);
+        }
     }
 
     public void onSleepButton(View view) {
-        if (sleepButtonState == 3) {
+        Date time = Calendar.getInstance().getTime();
+        String timeStr = DateFormat.getTimeInstance().format(time);
+        times[sleepButtonState] = time;
+        tvTimes[sleepButtonState].setText(sleepButtonStrings[sleepButtonState] + ": " + timeStr);
+        tvTimes[sleepButtonState].setVisibility(View.VISIBLE);
+        sleepButtonState++;
+        tvSleepButtonState.setText("state: " + sleepButtonState);
+
+        if (sleepButtonState == 4) {
             Intent questionsIntent = new Intent(this,QuestionsActivity.class);
-            // questionsIntent.putExtras(...);
-            startActivity(questionsIntent);
+            questionsIntent.putExtra("date",date.getTime());
+            questionsIntent.putExtra("time0",times[0].getTime());
+            questionsIntent.putExtra("time1",times[1].getTime());
+            questionsIntent.putExtra("time2",times[2].getTime());
+            questionsIntent.putExtra("time3",times[3].getTime());
+            startActivityForResult(questionsIntent,MAIN_ACTIVITY_CODE);
         } else {
-            sleepButtonState++;
             btnSleep.setText(sleepButtonStrings[sleepButtonState]);
             btnBack.setVisibility(View.VISIBLE);
         }
@@ -86,9 +132,21 @@ public class MainActivity extends AppCompatActivity
     public void onBackButton(View view) {
         if (sleepButtonState > 0) {
             sleepButtonState--;
+            tvTimes[sleepButtonState].setVisibility(View.INVISIBLE);
+            tvSleepButtonState.setText("state: " + sleepButtonState);
             btnSleep.setText(sleepButtonStrings[sleepButtonState]);
             if (sleepButtonState == 0) {
-                btnBack.setVisibility(View.INVISIBLE);
+                resetSleepButtonState();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MAIN_ACTIVITY_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+               resetSleepButtonState();
             }
         }
     }
