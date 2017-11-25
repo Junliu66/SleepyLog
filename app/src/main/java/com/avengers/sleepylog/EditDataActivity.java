@@ -14,11 +14,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class EditDataActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    Date date;
+    TextView tvDate;
+    Date[] times;
+    TextView[] tvTimes;
+    Date[] durations;
+    TextView[] tvDurations;
+    boolean naps;
+    int quality;
+
+    String callingActivity;
+    TextView tvCallingActivity;
+
+    SimpleDateFormat sdfDuration = new SimpleDateFormat("HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +64,50 @@ public class EditDataActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Above created by Android Studio Navigation Drawer Activity template
+
+        // Get data from calling Intent - for now just display
+        tvCallingActivity = (TextView) findViewById(R.id.tvECallingActivity);
+        tvDate = (TextView) findViewById(R.id.tvEDate);
+        TextView tvTime0 = (TextView) findViewById(R.id.tvETime0);
+        TextView tvTime1 = (TextView) findViewById(R.id.tvETime1);
+        TextView tvTime2 = (TextView) findViewById(R.id.tvETime2);
+        TextView tvTime3 = (TextView) findViewById(R.id.tvETime3);
+        tvTimes = new TextView[] {tvTime0,tvTime1,tvTime2,tvTime3};
+        TextView tvDuration0 = (TextView) findViewById(R.id.tvEDuration0);
+        TextView tvDuration1 = (TextView) findViewById(R.id.tvEDuration1);
+        TextView tvDuration2 = (TextView) findViewById(R.id.tvEDuration2);
+        tvDurations = new TextView[] {tvDuration0,tvDuration1,tvDuration2};
+        TextView tvNaps = (TextView) findViewById(R.id.tvENaps);
+        TextView tvQuality = (TextView) findViewById(R.id.tvEQuality);
+
+        times = new Date[4];
+        durations = new Date[3];
+
+        Bundle extras = getIntent().getExtras();
+        callingActivity = extras.getString("caller");
+        tvCallingActivity.setText(tvCallingActivity.getText() + " " + callingActivity);
+        date = new Date(extras.getLong("date"));
+        tvDate.setText(DateFormat.getDateInstance().format(date));
+
+        for (int i=0; i<4; i++) {
+            times[i] = new Date(extras.getLong("time"+i));
+            tvTimes[i].setText(DateFormat.getTimeInstance().format(times[i]));
+        }
+
+        sdfDuration.setTimeZone(TimeZone.getTimeZone("GMT+0"));
+        for (int i=0; i<3; i++) {
+            durations[i] = new Date(extras.getLong("duration"+i));
+            tvDurations[i].setText(sdfDuration.format(durations[i]));
+        }
+
+        naps = extras.getBoolean("naps");
+        tvNaps.setText(String.valueOf(naps));
+
+        quality = extras.getInt("quality");
+        tvQuality.setText("qual: " + String.valueOf(quality));
     }
 
     public void onEditDataDone(View view) {
-        //Intent mainIntent = new Intent(this,MainActivity.class);
-        // questionsIntent.putExtras(...);
-        //startActivity(mainIntent);
-        //this.finish();
         Intent returnIntent = getIntent();
         setResult(Activity.RESULT_OK, returnIntent);
         this.finish();

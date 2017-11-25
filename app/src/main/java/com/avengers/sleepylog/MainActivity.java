@@ -1,6 +1,7 @@
 package com.avengers.sleepylog;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -63,7 +65,30 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Above created by Android Studio Navigation Drawer Activity template
+
+        // For testing, long clock on date will launch DatePickerDialog
         tvDate = (TextView) findViewById(R.id.tvDate);
+        tvDate.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dpDialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        calendar.set(year,month,dayOfMonth);
+                        date = calendar.getTime();
+                        String dateStr = DateFormat.getDateInstance().format(date);
+                        tvDate.setText(dateStr);
+                    }
+                } , year, month, day);
+                dpDialog.show();
+                return true;
+            }
+        });
+
         tvSleepButtonState = (TextView) findViewById(R.id.tvSleepButtonState);
         sleepButtonState = 0;
         String bedtime = getString(R.string.time_to_bed);
@@ -116,13 +141,14 @@ public class MainActivity extends AppCompatActivity
         tvSleepButtonState.setText("state: " + sleepButtonState);
 
         if (sleepButtonState == 4) {
-            Intent questionsIntent = new Intent(this,QuestionsActivity.class);
-            questionsIntent.putExtra("date",date.getTime());
-            questionsIntent.putExtra("time0",times[0].getTime());
-            questionsIntent.putExtra("time1",times[1].getTime());
-            questionsIntent.putExtra("time2",times[2].getTime());
-            questionsIntent.putExtra("time3",times[3].getTime());
-            startActivityForResult(questionsIntent,MAIN_ACTIVITY_CODE);
+            Intent intent = new Intent(this,QuestionsActivity.class);
+            intent.putExtra("caller","MainActivity");
+            intent.putExtra("date",date.getTime());
+            intent.putExtra("time0",times[0].getTime());
+            intent.putExtra("time1",times[1].getTime());
+            intent.putExtra("time2",times[2].getTime());
+            intent.putExtra("time3",times[3].getTime());
+            startActivityForResult(intent,MAIN_ACTIVITY_CODE);
         } else {
             btnSleep.setText(sleepButtonStrings[sleepButtonState]);
             btnBack.setVisibility(View.VISIBLE);
@@ -147,6 +173,9 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == MAIN_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                resetSleepButtonState();
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                sleepButtonState = 3;
+                tvSleepButtonState.setText("state: " + sleepButtonState);
             }
         }
     }

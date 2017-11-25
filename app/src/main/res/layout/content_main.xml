@@ -36,6 +36,7 @@
         android:layout_marginStart="165dp"
         android:text="Date"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/btnSleep"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -27,4 +27,19 @@
     <string name="avengers">Team Avengers</string>
     <string name="team_members">Kevin Ball, Victoria Larina, Junliu Zhang</string>
 
+    <string name="sleep_quality_prompt">Choose a country</string>
+    <string-array name="sleep_quality_array">
+        <item>1 (poor)</item>
+        <item>2 </item>
+        <item>3 </item>
+        <item>4 </item>
+        <item>5 (excellent)</item>
+    </string-array>
+
+
+    <integer name="tag0">0</integer>
+    <integer name="tag1">1</integer>
+    <integer name="tag2">2</integer>
+
+
 </resources>

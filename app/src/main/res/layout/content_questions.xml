@@ -13,66 +13,164 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:text="@string/answer_questions"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvIntentDataCheck"
+        android:id="@+id/tvQuestion1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Intent data check:"
+        android:layout_marginTop="4dp"
+        android:text="1. How long do you think it take you to fall asleep?"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvQuestionsWelcome" />
 
-    <TextView
-        android:id="@+id/tvQDate"
+    <Button
+        android:id="@+id/btnSetFallAsleep"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="TextView"
+        android:onClick="onSetTimeDuration"
+        android:tag="@integer/tag0"
+        android:text="Set Time"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvIntentDataCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestion1" />
 
     <TextView
-        android:id="@+id/tvQTime0"
+        android:id="@+id/tvSetFallAsleep"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQDate" />
+
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="00:00"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        app:layout_constraintStart_toEndOf="@+id/btnSetFallAsleep"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestion1" />
 
     <TextView
-        android:id="@+id/tvQTime1"
+        android:id="@+id/tvQuestion2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="TextView"
+        android:text="2. How long do you think you were awake durning the night?"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQTime0" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSetFallAsleep" />
+
+    <Button
+        android:id="@+id/btnSetTimeAwakenings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:tag="@integer/tag1"
+        android:onClick="onSetTimeDuration"
+        android:text="Set Time"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestion2" />
+
 
     <TextView
-        android:id="@+id/tvQTime2"
+        android:id="@+id/tvSetTimeAwakenings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQTime1" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="00:00"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        app:layout_constraintStart_toEndOf="@+id/btnSetTimeAwakenings"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestion2" />
 
     <TextView
-        android:id="@+id/tvQTime3"
+        android:id="@+id/tvQuestion3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="TextView"
+        android:text="3. Did you take any naps yesterday?"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQTime2" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSetTimeAwakenings" />
+
+    <RadioGroup
+        android:id="@+id/rgNap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestion3">
+
+        <RadioButton
+            android:id="@+id/rbNapYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="4dp"
+            android:text="Yes"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/rbNapNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="4dp"
+            android:text="No"
+            android:textSize="18sp" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnSetTimeNaps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:onClick="onSetTimeDuration"
+        android:tag="@integer/tag2"
+        android:text="Set Time"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/rgNap"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestion3" />
+
+    <TextView
+        android:id="@+id/tvSetTimeNaps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:paddingHorizontal="16dp"
+        android:text="00:00"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/btnSetTimeNaps"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestion3" />
+
+    <TextView
+        android:id="@+id/tvQuestion4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="4. How would you rate your Sleep Quality last night?"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSetTimeNaps" />
+
+    <Spinner
+        android:id="@+id/spinnerSleepQuality"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:entries="@array/sleep_quality_array"
+        android:prompt="@string/sleep_quality_prompt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestion4" />
+
 
     <Button
         android:id="@+id/btnBack"
@@ -80,10 +178,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="17dp"
         android:layout_marginStart="16dp"
+        android:onClick="onQuestionsBack"
         android:text="@string/back"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:onClick="onQuestionsBack"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnDone"
@@ -95,5 +193,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:onClick="onQuestionsDone"/>
+
 
 </android.support.constraint.ConstraintLayout>
