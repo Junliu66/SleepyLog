@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
 /**
  * Display
  */
@@ -43,8 +44,14 @@ public class DisplayDataActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        // Above created by Android Studio Navigation Drawer Activity template
     }
 
+    public void onDisplayDataDone(View view) {
+        this.finish();
+    }
+
+    // Below created by Android Studio Navigation Drawer Avtivity template
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
