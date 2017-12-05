@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 
 
 /**
@@ -45,6 +46,7 @@ public class DisplayDataActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         // Above created by Android Studio Navigation Drawer Activity template
+
     }
 
     public void onDisplayDataDone(View view) {
