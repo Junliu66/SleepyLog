@@ -18,17 +18,25 @@ import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
 public class EditDataActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    // Data from intent
+    long date_l;
+    long times_l[];
+    long durations_l[];
+    boolean naps;
+    int quality;
+
+    // Dates generated from intent longs
     Date date;
     Date[] times;
     Date[] durations;
-    boolean naps;
-    int quality;
+
 
     TextView tvDate;
     TextView[] tvTimes;
@@ -71,21 +79,44 @@ public class EditDataActivity extends AppCompatActivity
         tvNaps = (TextView) findViewById(R.id.tvENaps);
         tvQuality = (TextView) findViewById(R.id.tvEQuality);
 
+        times_l = new long[4];
         times = new Date[4];
+        durations_l = new long[3];
         durations = new Date[3];
 
         Bundle extras = getIntent().getExtras();
 
         // Get data from bundle
-        date = new Date(extras.getLong("date"));
-        for (int i=0; i<4; i++) {
-            times[i] = new Date(extras.getLong("time"+i));
+        if (extras != null) {
+            date_l = extras.getLong("date");
+            for (int i = 0; i < 4; i++) {
+                times_l[i] = extras.getLong("time" + i);
+            }
+            for (int i = 0; i < 3; i++) {
+                durations_l[i] = extras.getLong("duration" + i);
+            }
+            naps = extras.getBoolean("naps");
+            quality = extras.getInt("quality");
+        } else {
+            date_l = Calendar.getInstance().getTime().getTime();
+            for (int i=0;i < times.length; i++) {
+                times_l[i] = Calendar.getInstance().getTime().getTime();
+            }
+            for (int i = 0; i< durations.length; i++) {
+                durations_l[i] = 0;
+            }
+            naps = false;
+            quality = 1;
         }
-        for (int i=0; i<3; i++) {
-            durations[i] = new Date(extras.getLong("duration"+i));
+
+        // Generate Dates from longs
+        date = new Date(date_l);
+        for (int i = 0; i < 4; i++) {
+            times[i] = new Date(times_l[i]);
         }
-        naps = extras.getBoolean("naps");
-        quality = extras.getInt("quality");
+        for (int i = 0; i < 3; i++) {
+            durations[i] = new Date(durations_l[i]);
+        }
 
         displayData();
     }
