@@ -1,2 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <string name="app_name">睡眠日志</string>
+
+    <string name="navigation_drawer_open">打开抽屉导航栏</string>
+    <string name="navigation_drawer_close">关闭抽屉导航栏</string>
+
+    <string name="action_settings">设置</string>
+    <string name="title_activity_questions">问题</string>
+    <string name="title_activity_edit_data">编辑数据</string>
+    <string name="title_activity_display_data">显示数据</string>
+    <string name="m_import">输入</string>
+    <string name="m_gallery">画廊</string>
+    <string name="m_slideshow">幻灯片</string>
+    <string name="m_tools">工具</string>
+    <string name="m_communicate">交流</string>
+    <string name="m_share">分享</string>
+    <string name="m_send">发送</string>
+    <string name="answer_questions">请回答下列问题:</string>
+    <string name="back">返回</string>
+    <string name="done">完成</string>
+    <string name="welcome_msg">欢迎来到睡眠日志</string>
+    <string name="time_to_bed">上床时间</string>
+    <string name="time_to_wake">醒来时间</string>
+    <string name="time_to_sleep">睡觉时间</string>
+    <string name="time_out_of_bed">下床时间</string>
+    <string name="avengers">复仇者小组</string>
+    <string name="team_members">Kevin Ball, Victoria Larina, Junliu Zhang</string>
+
+</resources>

@@ -3,6 +3,7 @@ package com.avengers.sleepylog;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -94,7 +95,8 @@ public class MainActivity extends AppCompatActivity
         String bedtime = getString(R.string.time_to_bed);
         String sleepTime = getString(R.string.time_to_sleep);
         String wakeUpTime = getString(R.string.time_to_wake);
-        String outBedTime = getString(R.string.time_out_of_bed);
+        String outBedTime = getString(R.string.time_out_of_bed);;
+
         sleepButtonStrings = new String[] {bedtime, sleepTime, wakeUpTime, outBedTime};
         btnSleep = (Button) findViewById(R.id.btnSleep);
         btnSleep.setText(sleepButtonStrings[sleepButtonState]);
