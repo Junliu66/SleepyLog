@@ -38,21 +38,28 @@
             android:name=".EditDataActivity"
             android:label="@string/title_activity_edit_data"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.EDITDATAACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".DisplayDataActivity"
             android:label="@string/title_activity_display_data"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.DISPLAYDATAACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="HelpActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.HELPACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
