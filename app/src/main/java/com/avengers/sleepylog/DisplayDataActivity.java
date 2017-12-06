@@ -1,5 +1,6 @@
 package com.avengers.sleepylog;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 
 /**
@@ -20,6 +24,9 @@ import android.widget.ArrayAdapter;
  */
 public class DisplayDataActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    TextView tvDisplay;
+    private DBAdapter DBAgent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +53,75 @@ public class DisplayDataActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         // Above created by Android Studio Navigation Drawer Activity template
+
+
+        tvDisplay = (TextView)findViewById(R.id.tvDisplay);
+        final TextView tvPickStyle = (TextView)findViewById(R.id.tvTitle);
+        final Spinner dropdown = (Spinner)findViewById(R.id.spinner);
+        dropdown.setVisibility(View.VISIBLE);
+        tvPickStyle.setVisibility(View.VISIBLE);
+
+        String[] items = new String[]{
+                "Time to bed",
+                "Time to sleep",
+                "Time to wake up",
+                "Time out of bed",
+                "How long to fall asleep",
+                "Take nap",
+                "Rate your sleep quality"
+        };
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
+
+        //openDB();
+
+
+    }
+
+    public void showData(View v) {
+        Spinner dropdown = (Spinner)findViewById(R.id.spinner);
+        switch (dropdown.getSelectedItemPosition()) {
+            case 0:
+                tvDisplay.setText("haha");
+                //Cursor cursor = DBAgent.getAll();
+                //displayRecords(cursor);
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+        }
+    }
+
+    public void openDB() {
+        DBAgent = new DBAdapter(this);
+        DBAgent.open();
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+    public void closeDB() {
+        DBAgent.close();
+    }
+
+    public void onClearClicked(View view) {
+
+        DBAgent.deleteAll();
+    }
+
+
+    public void displayRecords(Cursor cursor) {
 
     }
 

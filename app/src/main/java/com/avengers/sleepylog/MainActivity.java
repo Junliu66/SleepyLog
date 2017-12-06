@@ -3,6 +3,7 @@ package com.avengers.sleepylog;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity
     String sleepButtonStrings[];
     TextView[] tvTimes;
     Date[] times;
+    Drawable sleepImages[];
 
 
     @Override
@@ -95,11 +98,24 @@ public class MainActivity extends AppCompatActivity
         String bedtime = getString(R.string.time_to_bed);
         String sleepTime = getString(R.string.time_to_sleep);
         String wakeUpTime = getString(R.string.time_to_wake);
-        String outBedTime = getString(R.string.time_out_of_bed);;
+        String outBedTime = getString(R.string.time_out_of_bed);
+
+        Drawable bed_time = getResources().getDrawable(R.drawable.bed_time);
+        bed_time.setAlpha(120);
+        Drawable sleep_time = getResources().getDrawable(R.drawable.sleep_time);
+        sleep_time.setAlpha(120);
+        Drawable wake_up_time = getResources().getDrawable(R.drawable.wake_up_time);
+        wake_up_time.setAlpha(120);
+        Drawable out_bed_time = getResources().getDrawable(R.drawable.out_bed_time);
+        out_bed_time.setAlpha(120);
 
         sleepButtonStrings = new String[] {bedtime, sleepTime, wakeUpTime, outBedTime};
+        sleepImages = new Drawable[]{bed_time, sleep_time, wake_up_time, out_bed_time};
+
         btnSleep = (Button) findViewById(R.id.btnSleep);
         btnSleep.setText(sleepButtonStrings[sleepButtonState]);
+        btnSleep.setBackground(sleepImages[sleepButtonState]);
+
         btnBack = (Button) findViewById(R.id.btnBack);
         btnBack.setVisibility(View.INVISIBLE);
         btnBack.setOnLongClickListener(new View.OnLongClickListener() {
@@ -126,6 +142,7 @@ public class MainActivity extends AppCompatActivity
         sleepButtonState = 0;
         tvSleepButtonState.setText("state: " + sleepButtonState);
         btnSleep.setText(sleepButtonStrings[sleepButtonState]);
+        btnSleep.setBackground(sleepImages[sleepButtonState]);
         btnBack.setVisibility(View.INVISIBLE);
         for (int i=0; i<4; i++) {
             tvTimes[i].setText("");
@@ -138,6 +155,7 @@ public class MainActivity extends AppCompatActivity
         String timeStr = DateFormat.getTimeInstance().format(time);
         times[sleepButtonState] = time;
         tvTimes[sleepButtonState].setText(sleepButtonStrings[sleepButtonState] + ": " + timeStr);
+        //tvTimes[sleepButtonState].setBackground(sleepImages[sleepButtonState]);
         tvTimes[sleepButtonState].setVisibility(View.VISIBLE);
         sleepButtonState++;
         tvSleepButtonState.setText("state: " + sleepButtonState);
@@ -153,6 +171,7 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(intent,MAIN_ACTIVITY_CODE);
         } else {
             btnSleep.setText(sleepButtonStrings[sleepButtonState]);
+            btnSleep.setBackground(sleepImages[sleepButtonState]);
             btnBack.setVisibility(View.VISIBLE);
         }
     }
