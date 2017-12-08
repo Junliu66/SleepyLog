@@ -2,7 +2,6 @@ package com.avengers.sleepylog;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -46,7 +45,7 @@ public class EditDataActivity extends AppCompatActivity
     TextView tvQuality;
 
     private DBAdapter DBAgent;
-    TextView tvDisplay;
+    TextView tvDisplayTest;
 
     SimpleDateFormat sdfDuration = new SimpleDateFormat("HH:mm");
 
@@ -54,6 +53,7 @@ public class EditDataActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_data);
+        tvDisplayTest = (TextView)findViewById(R.id.tvDisplayTest);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -82,8 +82,6 @@ public class EditDataActivity extends AppCompatActivity
         tvDurations = new TextView[] {tvDuration0,tvDuration1,tvDuration2};
         tvNaps = (TextView) findViewById(R.id.tvENaps);
         tvQuality = (TextView) findViewById(R.id.tvEQuality);
-
-        tvDisplay = (TextView)findViewById(R.id.tvDisplay);
 
         times_l = new long[4];
         times = new Date[4];
@@ -123,9 +121,28 @@ public class EditDataActivity extends AppCompatActivity
         for (int i = 0; i < 3; i++) {
             durations[i] = new Date(durations_l[i]);
         }
-
         displayData();
+        //open database
         openDB();
+    }
+
+    public void openDB() {
+        DBAgent = new DBAdapter(this);
+        DBAgent.open();
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+    public void closeDB() {
+        DBAgent.close();
+    }
+
+    public void onClearClicked(View view) {
+
+        DBAgent.deleteAll();
     }
 
     public void calculateData() {
@@ -155,30 +172,28 @@ public class EditDataActivity extends AppCompatActivity
     }
 
     public void onEditDataDone(View view) {
-        Intent returnIntent = getIntent();
-        setResult(Activity.RESULT_OK, returnIntent);
-        // sent to database
+        //Intent returnIntent = getIntent();
+        //setResult(Activity.RESULT_OK, returnIntent);
 
-        this.finish();
-    }
+        long time_to_bed = times_l[0];
+        long time_to_sleep = times_l[1];
+        long time_to_wake_up = times_l[2];
+        long time_out_bed = times_l[3];
 
-    public void openDB() {
-        DBAgent = new DBAdapter(this);
-        DBAgent.open();
-    }
+        long asleep = durations_l[0];
+        long awake = durations_l[1];
+        long nap_duration = durations_l[2];
 
-    protected void onDestroy() {
-        super.onDestroy();
-        closeDB();
-    }
-
-    public void closeDB() {
-        DBAgent.close();
-    }
-
-    public void displayRecords(Cursor cursor) {
-
-
+        //Sent result to database
+        long rowId = DBAgent.insertRow( date_l,  time_to_bed, time_to_sleep,  time_to_wake_up,
+         time_out_bed,  asleep,  awake,  nap_duration,
+         naps,  quality);
+        if (rowId > 0){
+            tvDisplayTest.setText("Insert succeeded. RowId=" + rowId);
+        } else {
+            tvDisplayTest.setText("Insert failed.");
+        }
+        //this.finish();
     }
 
     public void onEditDataBack(View view) {

@@ -92,25 +92,6 @@ public class DisplayDataActivity extends AppCompatActivity
         }
     }
 
-    public void openDB() {
-        DBAgent = new DBAdapter(this);
-        DBAgent.open();
-    }
-
-    protected void onDestroy() {
-        super.onDestroy();
-        closeDB();
-    }
-
-    public void closeDB() {
-        DBAgent.close();
-    }
-
-    public void onClearClicked(View view) {
-
-        DBAgent.deleteAll();
-    }
-
 
     public void displayRecords(Cursor cursor) {
 
