@@ -2,6 +2,7 @@ package com.avengers.sleepylog;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -194,6 +195,28 @@ public class EditDataActivity extends AppCompatActivity
             tvDisplayTest.setText("Insert failed.");
         }
         //this.finish();
+    }
+
+    public void displayRecords(Cursor cursor) {
+        String output = "";
+        if (cursor.getCount() != 0) {
+            cursor.moveToFirst();
+            do {
+                Long date = cursor.getLong(DBAdapter.COL_DATE);
+                String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
+                long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
+                long time_to_sleep =cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
+                long time_to_wake_up =cursor.getLong(DBAdapter.COL_TIME_TO_WAKE_UP);
+                long time_out_bed =cursor.getLong(DBAdapter.COL_TIME_OUT_BED);
+                long asleep =cursor.getLong(DBAdapter.COL_ASLEEP);
+                long
+                String major = cursor.getString(DBAdapter.COL_MAJOR);
+                output += "id = " + id + " name: " + name + " major: " + major + "\n";
+            } while (cursor.moveToNext());
+
+        }
+        tvDisplay.setText(output);
+        cursor.close();
     }
 
     public void onEditDataBack(View view) {
