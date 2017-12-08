@@ -2,6 +2,7 @@ package com.avengers.sleepylog;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -196,8 +198,35 @@ public class EditDataActivity extends AppCompatActivity
         //this.finish();
     }
 
+    /**
+     * Tests database table.
+     * @param cursor
+     */
+    public  void displayRecord(Cursor cursor){
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            String output = "";
+            do {
+                Long date = cursor.getLong(DBAdapter.COL_DATE);
+                String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
+                Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
+                String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
+                //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
+
+
+                output += "date: " + dateString + " time: " + timeBedString + "\n";
+            } while (cursor.moveToNext());
+            tvDisplayTest.setText(output);
+            cursor.close();
+        } else {
+            tvDisplayTest.setText("The database is empty.");
+        }
+    }
+
     public void onEditDataBack(View view) {
-        this.finish();
+        Cursor cursor = DBAgent.getAll();
+        displayRecord(cursor);
+        //this.finish();
     }
 
     // Below created by Android Studio Navigation Drawer Avtivity template
