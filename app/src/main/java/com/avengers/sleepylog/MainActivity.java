@@ -92,13 +92,13 @@ public class MainActivity extends AppCompatActivity
         String outBedTime = getString(R.string.time_out_of_bed);
 
         Drawable bed_time = getResources().getDrawable(R.drawable.bed_time);
-        bed_time.setAlpha(120);
+        bed_time.setAlpha(150);
         Drawable sleep_time = getResources().getDrawable(R.drawable.sleep_time);
-        sleep_time.setAlpha(120);
+        sleep_time.setAlpha(150);
         Drawable wake_up_time = getResources().getDrawable(R.drawable.wake_up_time);
-        wake_up_time.setAlpha(120);
+        wake_up_time.setAlpha(150);
         Drawable out_bed_time = getResources().getDrawable(R.drawable.out_bed_time);
-        out_bed_time.setAlpha(120);
+        out_bed_time.setAlpha(150);
 
         sleepButtonStrings = new String[] {bedtime, sleepTime, wakeUpTime, outBedTime};
         sleepImages = new Drawable[]{bed_time, sleep_time, wake_up_time, out_bed_time};

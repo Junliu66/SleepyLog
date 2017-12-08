@@ -2,6 +2,7 @@ package com.avengers.sleepylog;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -44,6 +45,9 @@ public class EditDataActivity extends AppCompatActivity
     TextView tvNaps;
     TextView tvQuality;
 
+    private DBAdapter DBAgent;
+    TextView tvDisplay;
+
     SimpleDateFormat sdfDuration = new SimpleDateFormat("HH:mm");
 
     @Override
@@ -78,6 +82,8 @@ public class EditDataActivity extends AppCompatActivity
         tvDurations = new TextView[] {tvDuration0,tvDuration1,tvDuration2};
         tvNaps = (TextView) findViewById(R.id.tvENaps);
         tvQuality = (TextView) findViewById(R.id.tvEQuality);
+
+        tvDisplay = (TextView)findViewById(R.id.tvDisplay);
 
         times_l = new long[4];
         times = new Date[4];
@@ -119,6 +125,7 @@ public class EditDataActivity extends AppCompatActivity
         }
 
         displayData();
+        openDB();
     }
 
     public void calculateData() {
@@ -150,7 +157,28 @@ public class EditDataActivity extends AppCompatActivity
     public void onEditDataDone(View view) {
         Intent returnIntent = getIntent();
         setResult(Activity.RESULT_OK, returnIntent);
+        // sent to database
+
         this.finish();
+    }
+
+    public void openDB() {
+        DBAgent = new DBAdapter(this);
+        DBAgent.open();
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+    public void closeDB() {
+        DBAgent.close();
+    }
+
+    public void displayRecords(Cursor cursor) {
+
+
     }
 
     public void onEditDataBack(View view) {

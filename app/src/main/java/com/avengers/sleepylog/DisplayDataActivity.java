@@ -114,6 +114,7 @@ public class DisplayDataActivity extends AppCompatActivity
 
     public void displayRecords(Cursor cursor) {
 
+
     }
 
     public void onDisplayDataDone(View view) {
