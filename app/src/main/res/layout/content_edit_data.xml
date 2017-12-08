@@ -9,12 +9,13 @@
     tools:showIn="@layout/app_bar_edit_data">
 
     <TableLayout
+        android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView5"
@@ -28,17 +29,17 @@
                 android:id="@+id/tvEDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
                 android:clickable="true"
                 android:onClick="onClickText"
-                android:layout_marginStart="8dp"
                 android:text="Date"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView6"
@@ -52,15 +53,15 @@
                 android:id="@+id/tvETime0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_border"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/tv_border"
                 android:text="Time0"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView7"
@@ -74,15 +75,15 @@
                 android:id="@+id/tvETime1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_border"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/tv_border"
                 android:text="Time1"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView8"
@@ -96,16 +97,16 @@
                 android:id="@+id/tvETime2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
                 android:clickable="true"
-                android:layout_marginStart="8dp"
                 android:text="Time2"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView9"
@@ -119,15 +120,15 @@
                 android:id="@+id/tvETime3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_border"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/tv_border"
                 android:text="Time3"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView10"
@@ -141,15 +142,15 @@
                 android:id="@+id/tvEDuration0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_border"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/tv_border"
                 android:text="Duration0"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView11"
@@ -163,15 +164,15 @@
                 android:id="@+id/tvEDuration1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_border"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/tv_border"
                 android:text="Duration1"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView12"
@@ -185,15 +186,15 @@
                 android:id="@+id/tvEDuration2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_border"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/tv_border"
                 android:text="Duration2"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView13"
@@ -207,15 +208,15 @@
                 android:id="@+id/tvENaps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_border"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/tv_border"
                 android:text="Naps"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView14"
@@ -229,15 +230,15 @@
                 android:id="@+id/tvEQuality"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_border"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/tv_border"
                 android:text="Quality"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView15"
@@ -251,15 +252,15 @@
                 android:id="@+id/tvSleepTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_border"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/tv_border"
                 android:text="sleepTime"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView16"
@@ -273,15 +274,15 @@
                 android:id="@+id/tvTimeinBed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_border"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/tv_border"
                 android:text="TimeinBed"
                 android:textSize="24sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView17"
@@ -295,8 +296,8 @@
                 android:id="@+id/tvSleepEfficiency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_border"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/tv_border"
                 android:text="SleepEfficiency"
                 android:textSize="24sp" />
         </TableRow>
@@ -323,5 +324,18 @@
         android:text="@string/done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvDisplayTest"
+        android:layout_width="147dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tableLayout"
+        app:layout_constraintEnd_toStartOf="@+id/btnDone"
+        app:layout_constraintStart_toEndOf="@+id/btnBack" />
 
 </android.support.constraint.ConstraintLayout>
