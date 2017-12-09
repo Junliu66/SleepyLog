@@ -34,10 +34,19 @@ public class EditDataActivity extends AppCompatActivity
     boolean naps;
     int quality;
 
+    // calculated values
+    long total_time_asleep_l;
+    long total_time_in_bed_l;
+    float sleep_efficiency;
+
     // Dates generated from intent longs
     Date date;
     Date[] times;
     Date[] durations;
+
+    // Calculated durations
+    Date total_time_asleep;
+    Date total_time_in_bed;
 
 
     TextView tvDate;
