@@ -40,6 +40,10 @@
     <integer name="tag0">0</integer>
     <integer name="tag1">1</integer>
     <integer name="tag2">2</integer>
+    <integer name="tag3">3</integer>
+    <integer name="tag4">4</integer>
+    <integer name="tag5">5</integer>
+    <integer name="tag6">6</integer>
 
 
 </resources>
