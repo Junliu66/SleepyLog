@@ -174,8 +174,8 @@ public class EditDataActivity extends AppCompatActivity
     }
 
     public void onEditDataDone(View view) {
-        //Intent returnIntent = getIntent();
-        //setResult(Activity.RESULT_OK, returnIntent);
+        Intent returnIntent = getIntent();
+        setResult(Activity.RESULT_OK, returnIntent);
 
         long time_to_bed = times_l[0];
         long time_to_sleep = times_l[1];
@@ -187,15 +187,14 @@ public class EditDataActivity extends AppCompatActivity
         long nap_duration = durations_l[2];
 
         //Sent result to database
-        long rowId = DBAgent.insertRow( date_l,  time_to_bed, time_to_sleep,  time_to_wake_up,
-         time_out_bed,  asleep,  awake,  nap_duration,
-         naps,  quality);
+        long rowId = DBAgent.insertRow( date_l,  time_to_bed, time_to_sleep, time_to_wake_up,
+                                    time_out_bed, asleep, awake, nap_duration, naps,  quality);
         if (rowId > 0){
             tvDisplayTest.setText("Insert succeeded. RowId=" + rowId);
         } else {
             tvDisplayTest.setText("Insert failed.");
         }
-        //this.finish();
+        this.finish();
     }
 
     /**
@@ -211,10 +210,22 @@ public class EditDataActivity extends AppCompatActivity
                 String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
                 Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
                 String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
-                //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
+                Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
+                String timeSleepString = new SimpleDateFormat("HH:mm").format(new Time(time_to_sleep));
+                Long time_to_wake_up = cursor.getLong(DBAdapter.COL_TIME_TO_WAKE_UP);
+                String timeWakeString = new SimpleDateFormat("HH:mm").format(new Time(time_to_wake_up));
+                Long time_out_bed = cursor.getLong(DBAdapter.COL_TIME_OUT_BED);
+                String timeOutBedString = new SimpleDateFormat("HH:mm").format(new Time(time_out_bed));
+                Long asleep = cursor.getLong(DBAdapter.COL_ASLEEP);
+                String asleepString = new SimpleDateFormat("HH:mm").format(new Time(asleep));
+                Long awake = cursor.getLong(DBAdapter.COL_AWAKE);
+                String awakeString = new SimpleDateFormat("HH:mm").format(new Time(awake));
+                Long duration_nap = cursor.getLong(DBAdapter.COL_DURATION_NAP);
+                String durationNapString = new SimpleDateFormat("HH:mm").format(new Time(duration_nap));
+                String naps = cursor.getString(DBAdapter.COL_NAP);
+                int quality = cursor.getInt(DBAdapter.COL_QUALITY);
 
-
-                output += "date: " + dateString + " time: " + timeBedString + "\n";
+                output += "date: " + dateString + " naps: " + naps + "\n";
             } while (cursor.moveToNext());
             tvDisplayTest.setText(output);
             cursor.close();

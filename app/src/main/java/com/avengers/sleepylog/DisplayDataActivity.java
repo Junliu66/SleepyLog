@@ -18,6 +18,10 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 /**
  * Display
@@ -26,6 +30,7 @@ public class DisplayDataActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView tvDisplay;
+    Spinner dropdown;
     private DBAdapter DBAgent;
 
     @Override
@@ -48,27 +53,124 @@ public class DisplayDataActivity extends AppCompatActivity
 
         tvDisplay = (TextView)findViewById(R.id.tvDisplay);
         final TextView tvPickStyle = (TextView)findViewById(R.id.tvTitle);
-        final Spinner dropdown = (Spinner)findViewById(R.id.spinner);
+        dropdown = (Spinner)findViewById(R.id.spinner);
         dropdown.setVisibility(View.VISIBLE);
         tvPickStyle.setVisibility(View.VISIBLE);
 
         String[] items = new String[]{
+                "None",
                 "Time to bed",
                 "Time to sleep",
                 "Time to wake up",
                 "Time out of bed",
                 "How long to fall asleep",
+                "How long to wake up",
                 "Take nap",
                 "Rate your sleep quality"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
 
+        Cursor cursor;
+        //dropdown = (Spinner)findViewById(R.id.spinner);
+        switch (dropdown.getSelectedItemPosition()) {
+            case 0:
+                tvDisplay.setText(dropdown.getSelectedItemPosition());
+                //tvDisplay.setText("haha");
+                //Cursor cursor = DBAgent.getAll();
+                //displayRecords(cursor);
+                break;
+            case 1:
+                tvDisplay.setText("haha");
+                cursor = DBAgent.getAll();
+                displayRecord(cursor, items[1]);
+                break;
+            case 2:
+                cursor = DBAgent.getAll();
+                displayRecord(cursor, items[2]);
+                break;
+            case 3:
+                cursor = DBAgent.getAll();
+                displayRecord(cursor, items[3]);
+                break;
+            case 4:
+                cursor = DBAgent.getAll();
+                displayRecord(cursor, items[4]);
+                break;
+            case 5:
+                cursor = DBAgent.getAll();
+                displayRecord(cursor, items[5]);
+                break;
+            case 6:
+                cursor = DBAgent.getAll();
+                displayRecord(cursor, items[6]);
+                break;
+            case 7:
+                cursor = DBAgent.getAll();
+                displayRecord(cursor, items[7]);
+                break;
+            case 8:
+                cursor = DBAgent.getAll();
+                displayRecord(cursor, items[8]);
+                break;
+        }
         //openDB();
-
 
     }
 
+    public  void displayRecord(Cursor cursor, String item){
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            String output = "";
+            tvDisplay.setText("Date" + "\t\t" + item);
+            String dataString = "";
+            do {
+                Long date = cursor.getLong(DBAdapter.COL_DATE);
+                String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
+                switch (item) {
+                    case "Time to bed":
+                        Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
+                        dataString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
+                        break;
+                    case "Time to sleep":
+                        Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
+                        dataString = new SimpleDateFormat("HH:mm").format(new Time(time_to_sleep));
+                        break;
+                    case "Time to wake up":
+                        Long time_to_wake_up = cursor.getLong(DBAdapter.COL_TIME_TO_WAKE_UP);
+                        dataString = new SimpleDateFormat("HH:mm").format(new Time(time_to_wake_up));
+                        break;
+                    case "Time out of bed":
+                        Long time_out_bed = cursor.getLong(DBAdapter.COL_TIME_OUT_BED);
+                        dataString = new SimpleDateFormat("HH:mm").format(new Time(time_out_bed));
+                        break;
+                    case "How long to fall asleep":
+                        Long asleep = cursor.getLong(DBAdapter.COL_ASLEEP);
+                        dataString  = new SimpleDateFormat("HH:mm").format(new Time(asleep));
+                        break;
+                    case "How long to wake up":
+                        Long awake = cursor.getLong(DBAdapter.COL_AWAKE);
+                        dataString = new SimpleDateFormat("HH:mm").format(new Time(awake));
+                        break;
+                    case "Take nap":
+                        String naps = cursor.getString(DBAdapter.COL_NAP);
+                        Long duration_nap = cursor.getLong(DBAdapter.COL_DURATION_NAP);
+                        dataString = new SimpleDateFormat("HH:mm").format(new Time(duration_nap));
+                        break;
+                    case "Rate your sleep quality":
+                        dataString = String.valueOf(cursor.getInt(DBAdapter.COL_QUALITY));
+                        break;
+                }
+
+                output += date + "\t\t" + dataString + "\n";
+            } while (cursor.moveToNext());
+            tvDisplay.setText(output);
+            cursor.close();
+        } else {
+            tvDisplay.setText("The database is empty.");
+        }
+    }
+/**
     public void showData(View v) {
         Spinner dropdown = (Spinner)findViewById(R.id.spinner);
         switch (dropdown.getSelectedItemPosition()) {
@@ -90,12 +192,17 @@ public class DisplayDataActivity extends AppCompatActivity
             case 6:
                 break;
         }
-    }
+    }**/
 
 
     public void displayRecords(Cursor cursor) {
 
 
+    }
+
+    public void onClearClicked(View view) {
+
+        DBAgent.deleteAll();
     }
 
     public void onDisplayDataDone(View view) {
