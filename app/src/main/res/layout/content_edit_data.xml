@@ -312,7 +312,8 @@
         android:text="@string/back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:onClick="onEditDataBack"/>
+        android:onClick="onEditDataBack"
+        />
 
     <Button
         android:id="@+id/btnDone"

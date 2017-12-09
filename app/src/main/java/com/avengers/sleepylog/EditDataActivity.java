@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -197,30 +198,35 @@ public class EditDataActivity extends AppCompatActivity
         //this.finish();
     }
 
-    public void displayRecords(Cursor cursor) {
-        String output = "";
-        if (cursor.getCount() != 0) {
+    /**
+     * Tests database table.
+     * @param cursor
+     */
+    public  void displayRecord(Cursor cursor){
+        if(cursor.getCount() > 0){
             cursor.moveToFirst();
+            String output = "";
             do {
                 Long date = cursor.getLong(DBAdapter.COL_DATE);
                 String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
-                long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
-                long time_to_sleep =cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
-                long time_to_wake_up =cursor.getLong(DBAdapter.COL_TIME_TO_WAKE_UP);
-                long time_out_bed =cursor.getLong(DBAdapter.COL_TIME_OUT_BED);
-                long asleep =cursor.getLong(DBAdapter.COL_ASLEEP);
-                long
-                String major = cursor.getString(DBAdapter.COL_MAJOR);
-                output += "id = " + id + " name: " + name + " major: " + major + "\n";
-            } while (cursor.moveToNext());
+                Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
+                String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
+                //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
 
+
+                output += "date: " + dateString + " time: " + timeBedString + "\n";
+            } while (cursor.moveToNext());
+            tvDisplayTest.setText(output);
+            cursor.close();
+        } else {
+            tvDisplayTest.setText("The database is empty.");
         }
-        tvDisplay.setText(output);
-        cursor.close();
     }
 
     public void onEditDataBack(View view) {
-        this.finish();
+        Cursor cursor = DBAgent.getAll();
+        displayRecord(cursor);
+        //this.finish();
     }
 
     // Below created by Android Studio Navigation Drawer Avtivity template
