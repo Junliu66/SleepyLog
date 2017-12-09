@@ -1,6 +1,8 @@
 package com.avengers.sleepylog;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -15,7 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.sql.Time;
 import java.text.DateFormat;
@@ -25,7 +29,9 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class EditDataActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        TimePickerDialog.OnTimeSetListener,
+        DatePickerDialog.OnDateSetListener {
 
     // Data from intent
     long date_l;
@@ -34,10 +40,19 @@ public class EditDataActivity extends AppCompatActivity
     boolean naps;
     int quality;
 
+    // calculated values
+    long total_time_asleep_l;
+    long total_time_in_bed_l;
+    float sleep_efficiency;
+
     // Dates generated from intent longs
     Date date;
     Date[] times;
     Date[] durations;
+
+    // Calculated durations
+    Date total_time_asleep;
+    Date total_time_in_bed;
 
 
     TextView tvDate;
@@ -45,11 +60,17 @@ public class EditDataActivity extends AppCompatActivity
     TextView[] tvDurations;
     TextView tvNaps;
     TextView tvQuality;
+    TextView tvSleepTime;
+    TextView tvTimeInBed;
+    TextView tvSleepEfficiency;
 
     private DBAdapter DBAgent;
     TextView tvDisplayTest;
 
     SimpleDateFormat sdfDuration = new SimpleDateFormat("HH:mm");
+
+    int timePickerIdx;
+    int timesIdx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +106,10 @@ public class EditDataActivity extends AppCompatActivity
         tvNaps = (TextView) findViewById(R.id.tvENaps);
         tvQuality = (TextView) findViewById(R.id.tvEQuality);
 
+        tvSleepTime = (TextView) findViewById(R.id.tvSleepTime);
+        tvTimeInBed = (TextView) findViewById(R.id.tvTimeinBed);
+        tvSleepEfficiency = (TextView) findViewById(R.id.tvSleepEfficiency);
+
         times_l = new long[4];
         times = new Date[4];
         durations_l = new long[3];
@@ -115,6 +140,9 @@ public class EditDataActivity extends AppCompatActivity
             quality = 1;
         }
 
+        // calculate  total_time_asleep_l, total_time_in_bed_l, and sleep_efficiency;
+        calculateData();
+
         // Generate Dates from longs
         date = new Date(date_l);
         for (int i = 0; i < 4; i++) {
@@ -123,6 +151,9 @@ public class EditDataActivity extends AppCompatActivity
         for (int i = 0; i < 3; i++) {
             durations[i] = new Date(durations_l[i]);
         }
+        total_time_in_bed = new Date(total_time_in_bed_l);
+        total_time_asleep = new Date(total_time_asleep_l);
+
         displayData();
         //open database
         openDB();
@@ -147,9 +178,27 @@ public class EditDataActivity extends AppCompatActivity
         DBAgent.deleteAll();
     }
 
+    /**
+     * Calculate total_time_asleep_l, total_time_in_bed_l, and sleep_efficiency
+     */
     public void calculateData() {
+        long time_to_bed = times_l[0];
+        long time_to_sleep = times_l[1];
+        long time_wake_up = times_l[2];
+        long time_out_bed = times_l[3];
 
+        long time_to_fall_asleep = durations_l[0];
+        long length_of_awakenings = durations_l[1];
+        long nap_duration = durations_l[2];
+
+        total_time_in_bed_l = time_out_bed - time_to_bed;
+        total_time_asleep_l = time_wake_up - time_to_sleep - time_to_fall_asleep - length_of_awakenings;
+        sleep_efficiency = total_time_asleep_l/total_time_in_bed_l;
     }
+
+    /**
+     * Display data in TextViews
+     */
     public void displayData() {
         tvDate.setText(DateFormat.getDateInstance().format(date));
 
@@ -166,11 +215,51 @@ public class EditDataActivity extends AppCompatActivity
 
         tvQuality.setText("qual: " + String.valueOf(quality));
 
+        tvTimeInBed.setText(sdfDuration.format(total_time_in_bed));
+        tvSleepTime.setText(sdfDuration.format(total_time_asleep));
+        tvSleepEfficiency.setText(String.format ("%.3f",sleep_efficiency));
     }
 
-    public void onClickText(View view) {
-        TextView tv = (TextView) view;
-        tv.setText("CLicked");
+    public void onClickDate(View view) {
+
+    }
+
+    public void onClickTime(View view) {
+        timePickerIdx = Integer.parseInt(view.getTag().toString()) ;
+        TimePickerDialog tp = new TimePickerDialog(this,this,0,0,false);
+        tp.show();
+    }
+
+    public void onClickDuration(View view) {
+        timePickerIdx = Integer.parseInt(view.getTag().toString()) ;
+        TimePickerDialog tp = new TimePickerDialog(this,this,0,0,true);
+        tp.show();
+    }
+
+    public void onClickNaps(View view) {
+
+    }
+
+    public void onClickSleepQuality(View view) {
+
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+        if (timePickerIdx < 4) {
+
+        } else {
+            long duration_in_ms = ((hourOfDay * 60) + minute) * 60 * 1000;
+            this.durations_l[timePickerIdx - 4] = duration_in_ms;
+            this.durations[timePickerIdx - 4] = new Date(duration_in_ms);
+        }
+        calculateData();
+        displayData();
     }
 
     public void onEditDataDone(View view) {

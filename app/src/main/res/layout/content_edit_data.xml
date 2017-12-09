@@ -32,7 +32,7 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
                 android:clickable="true"
-                android:onClick="onClickText"
+                android:onClick="onClickDate"
                 android:text="Date"
                 android:textSize="24sp" />
         </TableRow>
@@ -55,6 +55,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
+                android:clickable="true"
+                android:onClick="onClickTime"
+                android:tag="@integer/tag0"
                 android:text="Time0"
                 android:textSize="24sp" />
         </TableRow>
@@ -77,6 +80,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
+                android:clickable="true"
+                android:onClick="onClickTime"
+                android:tag="@integer/tag1"
                 android:text="Time1"
                 android:textSize="24sp" />
         </TableRow>
@@ -100,6 +106,8 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
                 android:clickable="true"
+                android:onClick="onClickTime"
+                android:tag="@integer/tag2"
                 android:text="Time2"
                 android:textSize="24sp" />
         </TableRow>
@@ -122,6 +130,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
+                android:clickable="true"
+                android:onClick="onClickTime"
+                android:tag="@integer/tag3"
                 android:text="Time3"
                 android:textSize="24sp" />
         </TableRow>
@@ -144,6 +155,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
+                android:clickable="true"
+                android:onClick="onClickDuration"
+                android:tag="@integer/tag4"
                 android:text="Duration0"
                 android:textSize="24sp" />
         </TableRow>
@@ -166,6 +180,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
+                android:clickable="true"
+                android:onClick="onClickDuration"
+                android:tag="@integer/tag5"
                 android:text="Duration1"
                 android:textSize="24sp" />
         </TableRow>
@@ -188,6 +205,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
+                android:clickable="true"
+                android:onClick="onClickDuration"
+                android:tag="@integer/tag6"
                 android:text="Duration2"
                 android:textSize="24sp" />
         </TableRow>
@@ -210,6 +230,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
+                android:clickable="true"
+                android:onClick="onClickNaps"
                 android:text="Naps"
                 android:textSize="24sp" />
         </TableRow>
@@ -232,6 +254,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
+                android:clickable="true"
+                android:onClick="onClickSleepQuality"
                 android:text="Quality"
                 android:textSize="24sp" />
         </TableRow>

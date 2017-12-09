@@ -85,16 +85,7 @@ public class QuestionsActivity extends AppCompatActivity
                 (TextView) findViewById(R.id.tvSetFallAsleep),
                 (TextView) findViewById(R.id.tvSetTimeAwakenings),
                 (TextView) findViewById(R.id.tvSetTimeNaps)};
-        /*
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+0"));
-        calendar.setTimeInMillis(0);
-        duration_00_00_l = calendar.getTimeInMillis();
-        duration_00_00 = calendar.getTime();
-        for (int i=0; i<3;i++) {
-            this.durations[i] = duration_00_00_l;
-            this.tvDurations[i].setText(sdfDuration.format(duration_00_00) + " : " + String.valueOf(duration_00_00_l));
-        }
-        */
+
         duration_00_00_l = 0;
         duration_00_00 = new Date(duration_00_00_l);
         for (int i=0; i<3;i++) {
@@ -142,27 +133,10 @@ public class QuestionsActivity extends AppCompatActivity
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        /*
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        calendar.set(1970,0, 1, hourOfDay,minute,0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        this.durations[durationsIdx] = calendar.getTimeInMillis();
-        Date timeSelected = calendar.getTime();
-        //DateFormat df = DateFormat.getDateInstance(DateFormat.LONG);
-        //df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        //DateFormat tf = DateFormat.getTimeInstance(DateFormat.LONG);
-        //tf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        //String dateStr = df.format(timeSelected);
-        //String timeStr = tf.format(timeSelected);
-        //String dateStr = DateFormat.getDateInstance(DateFormat.LONG).format(timeSelected);
-        //this.tvDurations[durationsIdx].setText(sdfDuration.format(timeSelected) + " : " + String.valueOf(durations[durationsIdx]) + " : "
-        //    + "\n" + dateStr + " : " + timeStr);
-        */
         long duration_in_ms = ((hourOfDay * 60) + minute) * 60 * 1000;
         this.durations[durationsIdx] = duration_in_ms;
         Date timeSelected = new Date(duration_in_ms);
 
-        //this.tvDurations[durationsIdx].setText(sdfDuration.format(timeSelected) + " : " + String.valueOf(durations[durationsIdx]));
         this.tvDurations[durationsIdx].setText(sdfDuration.format(timeSelected));
     }
 
