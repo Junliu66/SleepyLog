@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SleepyLog.iml" filepath="$PROJECT_DIR$/SleepyLog.iml" />
-      <module fileurl="file://C:\app2\SleepyLog\SleepyLog.iml" filepath="C:\app2\SleepyLog\SleepyLog.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

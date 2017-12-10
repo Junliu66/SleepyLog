@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:text="1. How long do you think it take you to fall asleep?"
+        android:text="@string/question1"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvQuestionsWelcome" />
@@ -37,7 +37,7 @@
         android:layout_marginStart="8dp"
         android:onClick="onSetTimeDuration"
         android:tag="@integer/tag0"
-        android:text="Set Time"
+        android:text="@string/set_time"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvQuestion1" />
@@ -49,7 +49,7 @@
 
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="00:00"
+        android:text="@string/zero_time"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         app:layout_constraintStart_toEndOf="@+id/btnSetFallAsleep"
         app:layout_constraintTop_toBottomOf="@+id/tvQuestion1" />
@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="2. How long do you think you were awake durning the night?"
+        android:text="@string/question2"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSetFallAsleep" />
@@ -71,7 +71,7 @@
         android:layout_marginStart="8dp"
         android:tag="@integer/tag1"
         android:onClick="onSetTimeDuration"
-        android:text="Set Time"
+        android:text="@string/set_time"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvQuestion2" />
@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="00:00"
+        android:text="@string/zero_time"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         app:layout_constraintStart_toEndOf="@+id/btnSetTimeAwakenings"
         app:layout_constraintTop_toBottomOf="@+id/tvQuestion2" />
@@ -93,7 +93,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="3. Did you take any naps yesterday?"
+        android:text="@string/quetion3"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSetTimeAwakenings" />
@@ -112,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="4dp"
-            android:text="Yes"
+            android:text="@string/yes"
             android:textSize="18sp" />
 
         <RadioButton
@@ -120,7 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="4dp"
-            android:text="No"
+            android:text="@string/no"
             android:textSize="18sp" />
     </RadioGroup>
 
@@ -131,7 +131,7 @@
         android:layout_marginStart="16dp"
         android:onClick="onSetTimeDuration"
         android:tag="@integer/tag2"
-        android:text="Set Time"
+        android:text="@string/set_time"
         android:textSize="12sp"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/rgNap"
@@ -144,7 +144,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:paddingHorizontal="16dp"
-        android:text="00:00"
+        android:text="@string/zero_time"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/btnSetTimeNaps"
@@ -155,7 +155,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="4. How would you rate your Sleep Quality last night?"
+        android:text="@string/question4"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSetTimeNaps" />

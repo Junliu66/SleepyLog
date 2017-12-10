@@ -26,5 +26,13 @@
     <string name="time_out_of_bed">Время вставать</string>
     <string name="avengers">Команда мстителей</string>
     <string name="team_members">Кевин Болл, Виктория Ларина, Джунлиу Цзанг</string>
+    <string name="set_time">Ввести время</string>
+    <string name="question1">1. Сколько времени ппрошло перед тем как вы заснули?</string>
+    <string name="question2">2. Если вы просыпались в течении ночи, как долго вы не спали?</string>
+    <string name="quetion3">3. Спали ли вы вчера днём?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="question4">4. Как вы оцените качество своего сна сегодня?</string>
+    <string name="zero_time">00:00</string>
 
 </resources>

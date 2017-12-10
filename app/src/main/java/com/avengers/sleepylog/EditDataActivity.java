@@ -278,7 +278,7 @@ public class EditDataActivity extends AppCompatActivity
         //Sent result to database
         long rowId = DBAgent.insertRow( date_l,  time_to_bed, time_to_sleep,  time_to_wake_up,
          time_out_bed,  asleep,  awake,  nap_duration,
-         naps,  quality);
+         naps,  quality, total_time_asleep_l, total_time_in_bed_l, sleep_efficiency);
         if (rowId > 0){
             tvDisplayTest.setText("Insert succeeded. RowId=" + rowId);
         } else {

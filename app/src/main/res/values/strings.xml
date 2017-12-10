@@ -28,6 +28,14 @@
     <string name="team_members">Kevin Ball, Victoria Larina, Junliu Zhang</string>
 
     <string name="sleep_quality_prompt">Choose a country</string>
+    <string name="set_time">Set Time</string>
+    <string name="question1">1. How long do you think it take you to fall asleep?</string>
+    <string name="question2">2. How long do you think you were awake durning the night?</string>
+    <string name="quetion3">3. Did you take any naps yesterday?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="question4">4. How would you rate your Sleep Quality last night?</string>
+    <string name="zero_time">00:00</string>
     <string-array name="sleep_quality_array">
         <item>1 (poor)</item>
         <item>2 </item>
