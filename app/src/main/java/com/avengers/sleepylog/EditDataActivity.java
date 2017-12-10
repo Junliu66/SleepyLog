@@ -23,7 +23,9 @@ import android.widget.TimePicker;
 
 import java.sql.Time;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Month;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -69,14 +71,15 @@ public class EditDataActivity extends AppCompatActivity
 
     SimpleDateFormat sdfDuration = new SimpleDateFormat("HH:mm");
 
+    SimpleDateFormat sdfDefaultTimes = new SimpleDateFormat("hh:mma");
+    String[] defaultTimes = {"11:00PM","11:30PM","7:30AM","8:00AM"};
+
     int timePickerIdx;
-    int timesIdx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_data);
-        tvDisplayTest = (TextView)findViewById(R.id.tvDisplayTest);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -129,15 +132,8 @@ public class EditDataActivity extends AppCompatActivity
             naps = extras.getBoolean("naps");
             quality = extras.getInt("quality");
         } else {
-            date_l = Calendar.getInstance().getTime().getTime();
-            for (int i=0;i < times.length; i++) {
-                times_l[i] = Calendar.getInstance().getTime().getTime();
-            }
-            for (int i = 0; i< durations.length; i++) {
-                durations_l[i] = 0;
-            }
-            naps = false;
-            quality = 1;
+            setDefaultDate();
+            setDefaultTimes();
         }
 
         // calculate  total_time_asleep_l, total_time_in_bed_l, and sleep_efficiency;
@@ -156,26 +152,47 @@ public class EditDataActivity extends AppCompatActivity
 
         displayData();
         //open database
+        tvDisplayTest = (TextView)findViewById(R.id.tvDisplayTest);
         openDB();
     }
 
-    public void openDB() {
-        DBAgent = new DBAdapter(this);
-        DBAgent.open();
+    /**
+     * Set default date
+     */
+    public void  setDefaultDate() {
+        date_l = Calendar.getInstance().getTime().getTime();
     }
 
-    protected void onDestroy() {
-        super.onDestroy();
-        closeDB();
-    }
-
-    public void closeDB() {
-        DBAgent.close();
-    }
-
-    public void onClearClicked(View view) {
-
-        DBAgent.deleteAll();
+    /**
+     * Set default times
+     */
+    public void setDefaultTimes() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        for (int i = 0; i< times.length; i++) {
+            try {
+                Date defTime = sdfDefaultTimes.parse(defaultTimes[i]);
+                Calendar defCal = Calendar.getInstance();
+                defCal.setTime(defTime);
+                cal.set(Calendar.HOUR_OF_DAY,defCal.get(Calendar.HOUR_OF_DAY));
+                cal.set(Calendar.MINUTE,defCal.get(Calendar.MINUTE));
+                cal.set(Calendar.SECOND,0);
+                long time_in_ms = cal.getTimeInMillis();
+                if ((i > 0) && (time_in_ms < times_l[i-1])) {
+                    time_in_ms += 24 * 60 * 60 * 1000;
+                }
+                times_l[i] = time_in_ms;
+                times[i] = cal.getTime();
+            } catch (ParseException e) {
+                //e.printStackTrace();
+                times_l[i] = cal.getTimeInMillis();
+            }
+        }
+        for (int i = 0; i< durations.length; i++) {
+            durations_l[i] = 0;
+        }
+        naps = false;
+        quality = 1;
     }
 
     /**
@@ -193,7 +210,11 @@ public class EditDataActivity extends AppCompatActivity
 
         total_time_in_bed_l = time_out_bed - time_to_bed;
         total_time_asleep_l = time_wake_up - time_to_sleep - time_to_fall_asleep - length_of_awakenings;
-        sleep_efficiency = total_time_asleep_l/total_time_in_bed_l;
+        total_time_in_bed = new Date(total_time_in_bed_l);
+        total_time_asleep = new Date(total_time_asleep_l);
+
+        sleep_efficiency = (float) total_time_asleep_l/total_time_in_bed_l;
+
     }
 
     /**
@@ -217,16 +238,26 @@ public class EditDataActivity extends AppCompatActivity
 
         tvTimeInBed.setText(sdfDuration.format(total_time_in_bed));
         tvSleepTime.setText(sdfDuration.format(total_time_asleep));
-        tvSleepEfficiency.setText(String.format ("%.3f",sleep_efficiency));
+        tvSleepEfficiency.setText(String.format ("%.1f %%",100*sleep_efficiency));
     }
 
     public void onClickDate(View view) {
-
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        DatePickerDialog dp = new DatePickerDialog(this, this,
+                cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
+        dp.show();
     }
 
     public void onClickTime(View view) {
         timePickerIdx = Integer.parseInt(view.getTag().toString()) ;
-        TimePickerDialog tp = new TimePickerDialog(this,this,0,0,false);
+        Calendar cal = Calendar.getInstance();
+        if (timePickerIdx < 4) {
+            cal.setTime(times[timePickerIdx]);
+        } else {
+            cal.setTime(durations[timePickerIdx - 4]);
+        }
+        TimePickerDialog tp = new TimePickerDialog(this,this,cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE),false);
         tp.show();
     }
 
@@ -245,14 +276,30 @@ public class EditDataActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year,month,day,0,0);
+        date_l = cal.getTimeInMillis();
+        date = new Date(date_l);
+        setDefaultTimes();
+        calculateData();
+        displayData();
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
         if (timePickerIdx < 4) {
-
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(Calendar.HOUR_OF_DAY,hourOfDay);
+            cal.set(Calendar.MINUTE,minute);
+            cal.set(Calendar.SECOND,0);
+            long time_in_ms = cal.getTimeInMillis();
+            if ((timePickerIdx > 0) && (time_in_ms < this.times_l[timePickerIdx-1])) {
+                time_in_ms += 24 * 60 * 60 * 1000;
+            }
+            this.times_l[timePickerIdx] = time_in_ms;
+            this.times[timePickerIdx] = new Date(time_in_ms);
         } else {
             long duration_in_ms = ((hourOfDay * 60) + minute) * 60 * 1000;
             this.durations_l[timePickerIdx - 4] = duration_in_ms;
@@ -260,6 +307,25 @@ public class EditDataActivity extends AppCompatActivity
         }
         calculateData();
         displayData();
+    }
+
+    public void openDB() {
+        DBAgent = new DBAdapter(this);
+        DBAgent.open();
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+    public void closeDB() {
+        DBAgent.close();
+    }
+
+    public void onClearClicked(View view) {
+
+        DBAgent.deleteAll();
     }
 
     public void onEditDataDone(View view) {
