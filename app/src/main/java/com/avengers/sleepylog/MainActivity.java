@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     TextView[] tvTimes;
     Date[] times;
     Drawable sleepImages[];
+    boolean debug = true;
 
 
     @Override
@@ -85,6 +86,9 @@ public class MainActivity extends AppCompatActivity
         });
 
         tvSleepButtonState = (TextView) findViewById(R.id.tvSleepButtonState);
+        if (debug) {
+            tvSleepButtonState.setVisibility(View.VISIBLE);
+        }
         sleepButtonState = 0;
         String bedtime = getString(R.string.time_to_bed);
         String sleepTime = getString(R.string.time_to_sleep);
@@ -147,7 +151,9 @@ public class MainActivity extends AppCompatActivity
         times[sleepButtonState] = time;
         tvTimes[sleepButtonState].setText(sleepButtonStrings[sleepButtonState] + ": " + timeStr);
         //tvTimes[sleepButtonState].setBackground(sleepImages[sleepButtonState]);
-        tvTimes[sleepButtonState].setVisibility(View.VISIBLE);
+        if (debug) {
+            tvTimes[sleepButtonState].setVisibility(View.VISIBLE);
+        }
         sleepButtonState++;
         tvSleepButtonState.setText("state: " + sleepButtonState);
 
@@ -170,9 +176,12 @@ public class MainActivity extends AppCompatActivity
     public void onBackButton(View view) {
         if (sleepButtonState > 0) {
             sleepButtonState--;
-            tvTimes[sleepButtonState].setVisibility(View.INVISIBLE);
+            if (debug) {
+                tvTimes[sleepButtonState].setVisibility(View.INVISIBLE);
+            }
             tvSleepButtonState.setText("state: " + sleepButtonState);
             btnSleep.setText(sleepButtonStrings[sleepButtonState]);
+            btnSleep.setBackground(sleepImages[sleepButtonState]);
             if (sleepButtonState == 0) {
                 resetSleepButtonState();
             }
