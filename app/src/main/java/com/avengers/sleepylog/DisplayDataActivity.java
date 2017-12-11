@@ -114,7 +114,8 @@ public class DisplayDataActivity extends AppCompatActivity
     }
 
     public void onClearClicked(View view) {
-        DBAgent.deleteAll();
+        //DBAgent.deleteAll();
+        showAllEntries();
     }
 
     /**

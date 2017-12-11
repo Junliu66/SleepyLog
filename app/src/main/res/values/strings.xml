@@ -50,6 +50,7 @@
     <string name="enter_data_in_db">Enter Data in DB</string>
     <string name="pick_date">Pick a Date</string>
     <string name="please_choose_the_date">Please choose the date:</string>
+    <string name="already_in_db">Date is already in bd</string>
     <string-array name="sleep_quality_array">
         <item>1 (poor)</item>
         <item>2 </item>

@@ -333,17 +333,15 @@ public class EditDataActivity extends AppCompatActivity
      */
     public void onEditDataDone(View view) {
         Intent returnIntent = getIntent();
-        Bundle bundle = new Bundle();
-
-        //returnIntent.putExtra("db", );
         setResult(Activity.RESULT_OK, returnIntent);
-
-        this.finish();
+        Cursor cursor = DBAgent.getAll();
+        displayRecord(cursor);
+        //this.finish();
     }
 
     /**
      * Enters data into database.
-     * @param view Button Enter Dana in DB
+     * @param view Button Enter Data in DB
      */
     public void enterDataInDatabase(View view){
         long time_to_bed = times_l[0];
@@ -354,15 +352,19 @@ public class EditDataActivity extends AppCompatActivity
         long asleep = durations_l[0];
         long awake = durations_l[1];
         long nap_duration = durations_l[2];
-
-        //Send result to database
-        long rowId = DBAgent.insertRow( date_l,  time_to_bed, time_to_sleep,  time_to_wake_up,
-                time_out_bed,  asleep,  awake,  nap_duration,
-                naps,  quality, total_time_asleep_l, total_time_in_bed_l, sleep_efficiency);
-        if (rowId > 0){
-            tvDisplayTest.setText("Insert succeeded. RowId=" + rowId);
-        } else {
-            tvDisplayTest.setText("Insert failed.");
+        // check if a row exists
+        if(!DBAgent.checkIfRowExists(date_l)) {
+            //Send result to database
+            long rowId = DBAgent.insertRow(date_l, time_to_bed, time_to_sleep, time_to_wake_up,
+                    time_out_bed, asleep, awake, nap_duration,
+                    naps, quality, total_time_asleep_l, total_time_in_bed_l, sleep_efficiency);
+            if (rowId > 0) {
+                tvDisplayTest.setText("Insert succeeded. RowId=" + rowId);
+            } else {
+                tvDisplayTest.setText("Insert failed.");
+            }
+        }else{
+            tvDisplayTest.setText(R.string.already_in_db);
         }
     }
 

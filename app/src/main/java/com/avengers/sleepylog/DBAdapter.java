@@ -122,6 +122,12 @@ public final class DBAdapter extends AppCompatActivity {
 
     }
 
+    public boolean checkIfRowExists(long date){
+        String whereStr = " date = "+ date;
+        Cursor cursor = db.query(DATABASE_TABLE, ALL_KEYS, whereStr, null, null, null, null, null);
+        return (cursor.getCount() > 0);
+    }
+
     public boolean deleteRow(long rowid) {
         String whereStr = KEY_DATE + " = "+ rowid;
         return db.delete(DATABASE_TABLE, whereStr, null) > 0;
