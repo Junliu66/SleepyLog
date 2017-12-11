@@ -67,7 +67,7 @@ public final class DBAdapter extends AppCompatActivity {
 
     private DBAdapter(Context context){
         this.context = context;
-        myDBHelper = new DatabaseHelper(context);
+        myDBHelper = DatabaseHelper.getInstance(context);
     }
 
     public DBAdapter open() {
@@ -138,9 +138,18 @@ public final class DBAdapter extends AppCompatActivity {
         }
     }
 
-    class DatabaseHelper extends SQLiteOpenHelper {
+    final static class DatabaseHelper extends SQLiteOpenHelper {
 
-        public DatabaseHelper(Context context) {
+        private static DatabaseHelper databaseHelper;
+
+        public static synchronized DatabaseHelper getInstance(Context context) {
+            if (databaseHelper == null) {
+                databaseHelper = new DatabaseHelper(context);
+            }
+            return databaseHelper;
+        }
+
+        private DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
