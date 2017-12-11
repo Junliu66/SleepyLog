@@ -1,5 +1,6 @@
 package com.avengers.sleepylog;
 
+import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,11 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -29,9 +32,11 @@ import java.util.Date;
 public class DisplayDataActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    TextView tvDisplay;
+    TextView tvTitle, tvDisplay;
+    Button btnPicker;
     Spinner dropdown;
-    private DBAdapter DBAgent;
+    DBAdapter DBAgent;
+    int day, month, year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +56,40 @@ public class DisplayDataActivity extends AppCompatActivity
         // Above created by Android Studio Navigation Drawer Activity template
 
 
-        tvDisplay = (TextView)findViewById(R.id.tvDisplay);
-        final TextView tvPickStyle = (TextView)findViewById(R.id.tvTitle);
-        dropdown = (Spinner)findViewById(R.id.spinner);
-        dropdown.setVisibility(View.VISIBLE);
-        tvPickStyle.setVisibility(View.VISIBLE);
+        tvTitle = (TextView) findViewById(R.id.tvTitle);
+        tvDisplay = (TextView) findViewById(R.id.tvDisplay);
+        btnPicker = (Button)findViewById(R.id.btnPicker);
+        btnPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                day = calendar.get(Calendar.DATE);
+                month = calendar.get(Calendar.MONTH);
+                year = calendar.get(Calendar.YEAR);
+                //tvDate.setText((month + 1) +"/" + day + "/" + year);
+                tvDisplay.setText("");
 
+                DatePickerDialog myDateDialog = new DatePickerDialog(DisplayDataActivity.this, android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        year = i;
+                        month = i1;
+                        day = i2;
+                        tvDisplay.setText((month + 1) +"/" + day + "/" + year);
+                    }
+                }, year, month, day);
+                myDateDialog.setTitle(getResources().getString(R.string.dateAlertDialogTitle));
+                myDateDialog.setMessage(getResources().getString(R.string.dateAlertDialogMessage));
+                myDateDialog.show();
+            }
+        });
+
+        //dropdown = (Spinner) findViewById(R.id.spinner);
+        //dropdown.setVisibility(View.VISIBLE);
+        //tvPickStyle.setVisibility(View.VISIBLE);
+
+    }
+/**
         String[] items = new String[]{
                 "None",
                 "Time to bed",
@@ -170,7 +203,6 @@ public class DisplayDataActivity extends AppCompatActivity
             tvDisplay.setText("The database is empty.");
         }
     }
-/**
     public void showData(View v) {
         Spinner dropdown = (Spinner)findViewById(R.id.spinner);
         switch (dropdown.getSelectedItemPosition()) {

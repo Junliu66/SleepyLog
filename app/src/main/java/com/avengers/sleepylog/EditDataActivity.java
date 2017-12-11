@@ -193,7 +193,7 @@ public class EditDataActivity extends AppCompatActivity
 
         total_time_in_bed_l = time_out_bed - time_to_bed;
         total_time_asleep_l = time_wake_up - time_to_sleep - time_to_fall_asleep - length_of_awakenings;
-        sleep_efficiency = total_time_asleep_l/total_time_in_bed_l;
+        sleep_efficiency = (float)(total_time_asleep_l/total_time_in_bed_l);
     }
 
     /**
@@ -275,9 +275,15 @@ public class EditDataActivity extends AppCompatActivity
         long awake = durations_l[1];
         long nap_duration = durations_l[2];
 
+        long total_time_in_bed_l = time_out_bed - time_to_bed;
+        //long total_time_asleep_l = time_to_wake_up - time_to_sleep - asleep - awake;
+        //long sleep_efficiency = total_time_asleep_l/total_time_in_bed_l;
+
+        calculateData();
+
         //Sent result to database
         long rowId = DBAgent.insertRow( date_l,  time_to_bed, time_to_sleep, time_to_wake_up,
-                                    time_out_bed, asleep, awake, nap_duration, naps,  quality);
+                                    time_out_bed, asleep, awake, nap_duration, naps, quality);
         if (rowId > 0){
             tvDisplayTest.setText("Insert succeeded. RowId=" + rowId);
         } else {
@@ -309,12 +315,19 @@ public class EditDataActivity extends AppCompatActivity
                 String asleepString = new SimpleDateFormat("HH:mm").format(new Time(asleep));
                 Long awake = cursor.getLong(DBAdapter.COL_AWAKE);
                 String awakeString = new SimpleDateFormat("HH:mm").format(new Time(awake));
+                Long sleep_duration = cursor.getLong(DBAdapter.COL_SLEEP_DURATION);
+                String sleepDurationString = new SimpleDateFormat("HH:mm").format(new Time(sleep_duration));
+                Long bed_duration = cursor.getLong(DBAdapter.COL_BED_DURATION);
+                String bedDurationString = new SimpleDateFormat("HH:mm").format(new Time(bed_duration));
                 Long duration_nap = cursor.getLong(DBAdapter.COL_DURATION_NAP);
                 String durationNapString = new SimpleDateFormat("HH:mm").format(new Time(duration_nap));
                 String naps = cursor.getString(DBAdapter.COL_NAP);
                 int quality = cursor.getInt(DBAdapter.COL_QUALITY);
+                //float efficiency = cursor.getLong(DBAdapter.COL_EFFICIENCY);
+                //String efficiencyString = new SimpleDateFormat("HH:mm").format(new Time(efficiency));
 
-                output += "date: " + dateString + " naps: " + naps + "\n";
+                output += "date: " + dateString //+ " sleep: " + sleepDurationString
+                        + "bed: " + timeBedString + "\n";
             } while (cursor.moveToNext());
             tvDisplayTest.setText(output);
             cursor.close();

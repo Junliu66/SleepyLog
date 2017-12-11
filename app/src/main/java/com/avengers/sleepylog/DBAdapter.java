@@ -27,9 +27,12 @@ public class DBAdapter extends AppCompatActivity {
     private static final String KEY_TIME_OUT_BED = "time_out_bed";
     private static final String KEY_ASLEEP = "asleep";
     private static final String KEY_AWAKE = "awake";
+    private static final String KEY_DURATION_SLEEP = "sleep_duration";
+    private static final String KEY_DURATION_BED = "on_bed_duration";
     private static final String KEY_DURATION_NAP = "nap_duration";
     private static final String KEY_NAP = "naps";
     private static final String KEY_QUALITY = "quality";
+    //private static final String KEY_EFFICIENCY = "efficiency";
 
     protected static final int COL_DATE = 0;
     protected static final int COL_TIME_TO_BED = 1;
@@ -38,9 +41,12 @@ public class DBAdapter extends AppCompatActivity {
     protected static final int COL_TIME_OUT_BED = 4;
     protected static final int COL_ASLEEP = 5;
     protected static final int COL_AWAKE = 6;
-    protected static final int COL_DURATION_NAP = 7;
-    protected static final int COL_NAP = 8;
-    protected static final int COL_QUALITY = 9;
+    protected static final int COL_SLEEP_DURATION = 7;
+    protected static final int COL_BED_DURATION = 8;
+    protected static final int COL_DURATION_NAP = 9;
+    protected static final int COL_NAP = 10;
+    protected static final int COL_QUALITY = 11;
+    //protected static final int COL_EFFICIENCY = 12;
 
     private static final String[] ALL_KEYS = {KEY_DATE, KEY_TIME_TO_BED, KEY_TIME_TO_SLEEP, KEY_TIME_TO_WAKE_UP, KEY_TIME_OUT_BED,
             KEY_ASLEEP, KEY_AWAKE, KEY_DURATION_NAP, KEY_NAP, KEY_QUALITY};
@@ -79,6 +85,9 @@ public class DBAdapter extends AppCompatActivity {
         values.put(KEY_DURATION_NAP, nap_duration);
         values.put(KEY_NAP, naps);
         values.put(KEY_QUALITY, quality);
+        //values.put(KEY_DURATION_BED, total_time_in_bed_l);
+        //values.put(KEY_DURATION_SLEEP, total_time_asleep_l);
+        //values.put(KEY_EFFICIENCY, efficiency);
 
         long rowid = db.insert(DATABASE_TABLE, null, values);
         return rowid;
@@ -130,6 +139,8 @@ public class DBAdapter extends AppCompatActivity {
                     + KEY_DURATION_NAP + " LONG, "
                     + KEY_NAP + " BOOLEAN, "
                     + KEY_QUALITY + " INTEGER);";
+                    //+ KEY_DURATION_SLEEP + " LONG, "
+                    //+ KEY_DURATION_BED + " LONG);";
             db.execSQL(CREATE_DB_SQL);
         }
 

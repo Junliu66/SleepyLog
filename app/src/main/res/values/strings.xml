@@ -26,6 +26,10 @@
     <string name="time_out_of_bed">Time Out of Bed</string>
     <string name="avengers">Team Avengers</string>
     <string name="team_members">Kevin Ball, Victoria Larina, Junliu Zhang</string>
+    <string name="alertDialogTitle">Quit Dialog</string>
+    <string name="alertDialogMessage">Do you really want to quit?</string>
+    <string name="dateAlertDialogTitle">Date Picker Dialog</string>
+    <string name="dateAlertDialogMessage">Pick a Date</string>
 
     <string name="sleep_quality_prompt">Choose a country</string>
     <string-array name="sleep_quality_array">
