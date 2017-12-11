@@ -310,7 +310,7 @@ public class EditDataActivity extends AppCompatActivity
     }
 
     public void openDB() {
-        DBAgent = new DBAdapter(this);
+        DBAgent =  DBAgent.getInstance(this);
         DBAgent.open();
     }
 
@@ -324,14 +324,28 @@ public class EditDataActivity extends AppCompatActivity
     }
 
     public void onClearClicked(View view) {
-
         DBAgent.deleteAll();
     }
 
+    /**
+     * Goes to display activity
+     * @param view Button Done
+     */
     public void onEditDataDone(View view) {
-        //Intent returnIntent = getIntent();
-        //setResult(Activity.RESULT_OK, returnIntent);
+        Intent returnIntent = getIntent();
+        Bundle bundle = new Bundle();
 
+        //returnIntent.putExtra("db", );
+        setResult(Activity.RESULT_OK, returnIntent);
+
+        this.finish();
+    }
+
+    /**
+     * Enters data into database.
+     * @param view Button Enter Dana in DB
+     */
+    public void enterDataInDatabase(View view){
         long time_to_bed = times_l[0];
         long time_to_sleep = times_l[1];
         long time_to_wake_up = times_l[2];
@@ -341,16 +355,15 @@ public class EditDataActivity extends AppCompatActivity
         long awake = durations_l[1];
         long nap_duration = durations_l[2];
 
-        //Sent result to database
+        //Send result to database
         long rowId = DBAgent.insertRow( date_l,  time_to_bed, time_to_sleep,  time_to_wake_up,
-         time_out_bed,  asleep,  awake,  nap_duration,
-         naps,  quality, total_time_asleep_l, total_time_in_bed_l, sleep_efficiency);
+                time_out_bed,  asleep,  awake,  nap_duration,
+                naps,  quality, total_time_asleep_l, total_time_in_bed_l, sleep_efficiency);
         if (rowId > 0){
             tvDisplayTest.setText("Insert succeeded. RowId=" + rowId);
         } else {
             tvDisplayTest.setText("Insert failed.");
         }
-        //this.finish();
     }
 
     /**
@@ -379,9 +392,7 @@ public class EditDataActivity extends AppCompatActivity
     }
 
     public void onEditDataBack(View view) {
-        Cursor cursor = DBAgent.getAll();
-        displayRecord(cursor);
-        //this.finish();
+        this.finish();
     }
 
     // Below created by Android Studio Navigation Drawer Avtivity template

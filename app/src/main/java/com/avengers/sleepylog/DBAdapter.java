@@ -14,7 +14,9 @@ import java.io.File;
  * Database storing.
  */
 
-public class DBAdapter extends AppCompatActivity {
+public final class DBAdapter extends AppCompatActivity {
+
+    private static DBAdapter sInstance;
 
     private static final String DATABASE_NAME = "MYDB";
     private static final String DATABASE_TABLE = "MYDBTABLE";
@@ -56,7 +58,14 @@ public class DBAdapter extends AppCompatActivity {
     private SQLiteDatabase db;
     private DatabaseHelper myDBHelper;
 
-    public DBAdapter(Context context) {
+    public static synchronized DBAdapter getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new DBAdapter(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    private DBAdapter(Context context){
         this.context = context;
         myDBHelper = new DatabaseHelper(context);
     }
@@ -104,6 +113,13 @@ public class DBAdapter extends AppCompatActivity {
 
         }
         return cursor;
+    }
+
+    public Cursor getRowByPrimaryKey(long date){
+        String whereStr = " date = "+ date;
+        ///SELECT * FROM Person WHERE Name = 'B';
+       return db.query(DATABASE_TABLE, ALL_KEYS, whereStr, null, null, null, null, null);
+
     }
 
     public boolean deleteRow(long rowid) {

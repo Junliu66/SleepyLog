@@ -26,6 +26,8 @@
     <string name="time_out_of_bed">Время вставать</string>
     <string name="avengers">Команда мстителей</string>
     <string name="team_members">Кевин Болл, Виктория Ларина, Джунлиу Цзанг</string>
+
+    <string name="sleep_quality_prompt">Выберите страну</string>
     <string name="set_time">Ввести время</string>
     <string name="question1">1. Сколько времени ппрошло перед тем как вы заснули?</string>
     <string name="question2">2. Если вы просыпались в течении ночи, как долго вы не спали?</string>
@@ -34,5 +36,26 @@
     <string name="no">Нет</string>
     <string name="question4">4. Как вы оцените качество своего сна сегодня?</string>
     <string name="zero_time">00:00</string>
+    <string name="sleepefficiency">Эффективность сна</string>
+    <string name="time_in_bed">Время в постели</string>
+    <string name="time_asleep">Продолжительность сна</string>
+    <string name="sleep_quality">Качество сна</string>
+    <string name="naps">Сон днём</string>
+    <string name="any_naps_taken">Спали днём?</string>
+    <string name="length_of_naps">Продолжительность дневного сна</string>
+    <string name="length_of_awakenings">Продолжительность пробуждений</string>
+    <string name="time_to_fall_asleep">Время чтобы заснуть</string>
+    <string name="date">Дата</string>
+    <string name="enter_data_in_db">Ввести инфо в ДБ</string>
+    <string name="pick_a_date">Выбрать дату</string>
+    <string name="please_choose_the_date">Выберите дату:</string>
+
+    <string-array name="sleep_quality_array">
+        <item>1 (плохое)</item>
+        <item>2 </item>
+        <item>3 </item>
+        <item>4 </item>
+        <item>5 (отличное)</item>
+    </string-array>
 
 </resources>

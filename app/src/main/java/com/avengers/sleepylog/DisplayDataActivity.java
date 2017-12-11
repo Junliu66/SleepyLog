@@ -1,5 +1,6 @@
 package com.avengers.sleepylog;
 
+import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,18 +16,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**
  * Display
  */
 public class DisplayDataActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+         DatePickerDialog.OnDateSetListener {
 
-    TextView tvDisplay;
+    private TextView tvDisplay;
     private DBAdapter DBAgent;
+    private long pickedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +73,84 @@ public class DisplayDataActivity extends AppCompatActivity
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
 
-        //openDB();
+        openDB();
 
 
+    }
+
+    /**
+     *
+     * @param view Button Pick a date
+     */
+    public void onClickChooseDate(View view) {
+        Calendar cal = Calendar.getInstance();
+        //cal.setTime(date);
+        DatePickerDialog dp = new DatePickerDialog(this, this,
+                cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
+        dp.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year,month,dayOfMonth,0,0);
+        pickedDate = cal.getTimeInMillis();
+        tvDisplay.setText(String.format("%d %d %d", year,month,dayOfMonth));
+        showEntryByDate();
+    }
+
+    public void openDB() {
+        DBAgent = DBAgent.getInstance(this);
+        DBAgent.open();
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+    public void closeDB() {
+        DBAgent.close();
+    }
+
+    public void onClearClicked(View view) {
+        DBAgent.deleteAll();
+    }
+
+    /**
+     * Tests database table.
+     * @param cursor
+     */
+    public  void displayRecord(Cursor cursor){
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            StringBuilder output = new StringBuilder();
+            do {
+                Long date = cursor.getLong(DBAdapter.COL_DATE);
+                String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
+                Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
+                String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
+                //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
+
+
+                output.append("date: ").append(dateString).append(" time: ").append(timeBedString).append("\n");
+            } while (cursor.moveToNext());
+            tvDisplay.setText(output.toString());
+            cursor.close();
+        } else {
+            tvDisplay.setText("The database is empty.");
+        }
+    }
+
+    public void showAllEntries(){
+        Cursor cursor = DBAgent.getAll();
+        displayRecord(cursor);
+    }
+
+    //retrieve records by date
+    public void showEntryByDate(){
+        Cursor cursor = DBAgent.getRowByPrimaryKey(pickedDate);
+        displayRecord(cursor);
     }
 
     public void showData(View v) {
@@ -93,9 +177,7 @@ public class DisplayDataActivity extends AppCompatActivity
     }
 
 
-    public void displayRecords(Cursor cursor) {
 
-    }
 
     public void onDisplayDataDone(View view) {
         this.finish();
@@ -158,4 +240,5 @@ public class DisplayDataActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

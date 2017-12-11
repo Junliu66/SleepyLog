@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.avengers.sleepylog.EditDataActivity"
+    tools:layout_editor_absoluteY="81dp"
     tools:showIn="@layout/app_bar_edit_data">
 
     <TableLayout
@@ -24,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:text="Date"
+                android:text="@string/date"
                 android:textSize="24sp" />
 
             <TextView
@@ -48,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Time to Bed"
+                android:text="@string/time_to_bed"
                 android:textSize="24sp" />
 
             <TextView
@@ -73,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Time to Sleep"
+                android:text="@string/time_to_sleep"
                 android:textSize="24sp" />
 
             <TextView
@@ -98,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Time Awake"
+                android:text="@string/time_awake"
                 android:textSize="24sp" />
 
             <TextView
@@ -123,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Time out of Bed"
+                android:text="@string/time_out_of_bed"
                 android:textSize="24sp" />
 
             <TextView
@@ -148,7 +149,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Time to fall asleep"
+                android:text="@string/time_to_fall_asleep"
                 android:textSize="24sp" />
 
             <TextView
@@ -173,7 +174,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Length of Awakenings"
+                android:text="@string/length_of_awakenings"
                 android:textSize="24sp" />
 
             <TextView
@@ -198,7 +199,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Length of Naps"
+                android:text="@string/length_of_naps"
                 android:textSize="24sp" />
 
             <TextView
@@ -223,7 +224,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Any Naps taken"
+                android:text="@string/any_naps_taken"
                 android:textSize="24sp" />
 
             <TextView
@@ -234,7 +235,7 @@
                 android:background="@drawable/tv_border"
                 android:clickable="true"
                 android:onClick="onClickNaps"
-                android:text="Naps"
+                android:text="@string/naps"
                 android:textSize="24sp" />
         </TableRow>
 
@@ -247,7 +248,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Sleep Quality"
+                android:text="@string/sleep_quality"
                 android:textSize="24sp" />
 
             <TextView
@@ -271,7 +272,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Time Asleep"
+                android:text="@string/time_asleep"
                 android:textSize="24sp" />
 
             <TextView
@@ -293,7 +294,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Time In Bed"
+                android:text="@string/time_in_bed"
                 android:textSize="24sp" />
 
             <TextView
@@ -302,7 +303,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
-                android:text="TimeinBed"
+                android:text="@string/time_in_bed"
                 android:textSize="24sp" />
         </TableRow>
 
@@ -315,7 +316,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Sleep Efficiency"
+                android:text="@string/sleepefficiency"
                 android:textSize="24sp" />
 
             <TextView
@@ -324,7 +325,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/tv_border"
-                android:text="SleepEfficiency"
+                android:text="@string/sleepefficiency"
                 android:textSize="24sp" />
         </TableRow>
     </TableLayout>
@@ -344,12 +345,18 @@
         android:id="@+id/tvDisplayTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnBack" />
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/btnDone"
+        app:layout_constraintHorizontal_bias="0.346"
+        app:layout_constraintStart_toEndOf="@+id/btnBack"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/btnDone"
@@ -361,5 +368,19 @@
         android:text="@string/done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:onClick="enterDataInDatabase"
+        android:text="@string/enter_data_in_db"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnDone"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toEndOf="@+id/btnBack" />
 
 </android.support.constraint.ConstraintLayout>
