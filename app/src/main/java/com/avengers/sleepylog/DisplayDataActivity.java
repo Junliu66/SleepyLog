@@ -35,7 +35,7 @@ public class DisplayDataActivity extends AppCompatActivity
 
     private TextView tvDisplay;
     private DBAdapter DBAgent;
-    private long pickedDate;
+    private String pickedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +94,9 @@ public class DisplayDataActivity extends AppCompatActivity
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar cal = Calendar.getInstance();
         cal.set(year,month,dayOfMonth,0,0);
-        pickedDate = cal.getTimeInMillis();
-        tvDisplay.setText(String.format("%d %d %d", year,month,dayOfMonth));
+
+        pickedDate =  new SimpleDateFormat("MM/dd/yyyy").format(new Date(cal.getTimeInMillis() ));
+        tvDisplay.setText(pickedDate);
         showEntryByDate();
     }
 
@@ -113,9 +114,18 @@ public class DisplayDataActivity extends AppCompatActivity
         DBAgent.close();
     }
 
+    /**
+     *
+     * @param view Button Clear
+     */
     public void onClearClicked(View view) {
         //DBAgent.deleteAll();
         showAllEntries();
+    }
+
+    public void showAllEntries(){
+        Cursor cursor = DBAgent.getAll();
+        displayRecord(cursor);
     }
 
     /**
@@ -143,15 +153,23 @@ public class DisplayDataActivity extends AppCompatActivity
         }
     }
 
-    public void showAllEntries(){
-        Cursor cursor = DBAgent.getAll();
-        displayRecord(cursor);
-    }
-
-    //retrieve records by date
+    /**
+     * retrieve records by date
+     */
     public void showEntryByDate(){
         Cursor cursor = DBAgent.getRowByPrimaryKey(pickedDate);
-        displayRecord(cursor);
+        //displayRecord(cursor);
+        StringBuilder output = new StringBuilder();
+        if(cursor.getCount() > 0) {
+            String date = cursor.getString(DBAdapter.COL_DATE);
+            //String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
+            Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
+            String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
+            //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
+            output.append("date: ").append(date).append(" time: ").append(timeBedString).append("\n");
+        } else {
+            tvDisplay.setText("For picked date: " + tvDisplay.getText().toString() + " entry is not found");
+        }
     }
 
     public void showData(View v) {

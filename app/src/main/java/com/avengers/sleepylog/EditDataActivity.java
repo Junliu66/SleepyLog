@@ -353,9 +353,10 @@ public class EditDataActivity extends AppCompatActivity
         long awake = durations_l[1];
         long nap_duration = durations_l[2];
         // check if a row exists
-        if(!DBAgent.checkIfRowExists(date_l)) {
+        String stringDate = DateFormat.getDateInstance().format(date_l);
+        if(!DBAgent.checkIfRowExists(stringDate)) {
             //Send result to database
-            long rowId = DBAgent.insertRow(date_l, time_to_bed, time_to_sleep, time_to_wake_up,
+            long rowId = DBAgent.insertRow(stringDate, time_to_bed, time_to_sleep, time_to_wake_up,
                     time_out_bed, asleep, awake, nap_duration,
                     naps, quality, total_time_asleep_l, total_time_in_bed_l, sleep_efficiency);
             if (rowId > 0) {
@@ -377,14 +378,14 @@ public class EditDataActivity extends AppCompatActivity
             cursor.moveToFirst();
             String output = "";
             do {
-                Long date = cursor.getLong(DBAdapter.COL_DATE);
-                String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
+                String date = cursor.getString(DBAdapter.COL_DATE);
+                //String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
                 Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
                 String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
                 //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
 
 
-                output += "date: " + dateString + " time: " + timeBedString + "\n";
+                output += "date: " + date + " time: " + timeBedString + "\n";
             } while (cursor.moveToNext());
             tvDisplayTest.setText(output);
             cursor.close();
