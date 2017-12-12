@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="onClickChooseDate"
-                    android:text="@string/pick_date" />
+                    android:text="@string/pick_a_date" />
 
             </LinearLayout>
 
@@ -57,7 +57,7 @@
                     android:id="@+id/calendarDate1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Date picked" />
+                    android:text="@string/date_picked" />
 
             </LinearLayout>
 
@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onDisplayDataDone"
-            android:text="Done" />
+            android:text="@string/done" />
 
         <Button
             android:id="@+id/btnPrintDB"
@@ -95,16 +95,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="showAllEntries"
-            android:text="print DB" />
-
+            android:text="@string/print_db" />
+<!--
         <Button
             android:id="@+id/btnClear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onClearClicked"
-            android:text="Clear" />
-
+            android:text="@string/clear" />
+-->
     </LinearLayout>
 
 

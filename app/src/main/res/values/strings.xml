@@ -56,6 +56,13 @@
     <string name="pick_date">Pick a Date</string>
     <string name="please_choose_the_date">Please choose the date:</string>
     <string name="already_in_db">Date is already in bd</string>
+    <string name="print_db">print DB</string>
+    <string name="clear">Clear</string>
+    <string name="date_picked">Date picked</string>
+    <string name="home">Home</string>
+    <string name="edit_data">Edit Data</string>
+    <string name="display_data">Display Data</string>
+    <string name="help">Help</string>
     <string-array name="sleep_quality_array">
         <item>1 (poor)</item>
         <item>2 </item>
