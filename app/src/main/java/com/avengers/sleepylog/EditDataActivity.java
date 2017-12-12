@@ -23,7 +23,9 @@ import android.widget.TimePicker;
 
 import java.sql.Time;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Month;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -69,14 +71,15 @@ public class EditDataActivity extends AppCompatActivity
 
     SimpleDateFormat sdfDuration = new SimpleDateFormat("HH:mm");
 
+    SimpleDateFormat sdfDefaultTimes = new SimpleDateFormat("hh:mma");
+    String[] defaultTimes = {"11:00PM","11:30PM","7:30AM","8:00AM"};
+
     int timePickerIdx;
-    int timesIdx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_data);
-        tvDisplayTest = (TextView)findViewById(R.id.tvDisplayTest);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -129,15 +132,8 @@ public class EditDataActivity extends AppCompatActivity
             naps = extras.getBoolean("naps");
             quality = extras.getInt("quality");
         } else {
-            date_l = Calendar.getInstance().getTime().getTime();
-            for (int i=0;i < times.length; i++) {
-                times_l[i] = Calendar.getInstance().getTime().getTime();
-            }
-            for (int i = 0; i< durations.length; i++) {
-                durations_l[i] = 0;
-            }
-            naps = false;
-            quality = 1;
+            setDefaultDate();
+            setDefaultTimes();
         }
 
         // calculate  total_time_asleep_l, total_time_in_bed_l, and sleep_efficiency;
@@ -156,26 +152,47 @@ public class EditDataActivity extends AppCompatActivity
 
         displayData();
         //open database
+        tvDisplayTest = (TextView)findViewById(R.id.tvDisplayTest);
         openDB();
     }
 
-    public void openDB() {
-        DBAgent = new DBAdapter(this);
-        DBAgent.open();
+    /**
+     * Set default date
+     */
+    public void  setDefaultDate() {
+        date_l = Calendar.getInstance().getTime().getTime();
     }
 
-    protected void onDestroy() {
-        super.onDestroy();
-        closeDB();
-    }
-
-    public void closeDB() {
-        DBAgent.close();
-    }
-
-    public void onClearClicked(View view) {
-
-        DBAgent.deleteAll();
+    /**
+     * Set default times
+     */
+    public void setDefaultTimes() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        for (int i = 0; i< times.length; i++) {
+            try {
+                Date defTime = sdfDefaultTimes.parse(defaultTimes[i]);
+                Calendar defCal = Calendar.getInstance();
+                defCal.setTime(defTime);
+                cal.set(Calendar.HOUR_OF_DAY,defCal.get(Calendar.HOUR_OF_DAY));
+                cal.set(Calendar.MINUTE,defCal.get(Calendar.MINUTE));
+                cal.set(Calendar.SECOND,0);
+                long time_in_ms = cal.getTimeInMillis();
+                if ((i > 0) && (time_in_ms < times_l[i-1])) {
+                    time_in_ms += 24 * 60 * 60 * 1000;
+                }
+                times_l[i] = time_in_ms;
+                times[i] = cal.getTime();
+            } catch (ParseException e) {
+                //e.printStackTrace();
+                times_l[i] = cal.getTimeInMillis();
+            }
+        }
+        for (int i = 0; i< durations.length; i++) {
+            durations_l[i] = 0;
+        }
+        naps = false;
+        quality = 1;
     }
 
     /**
@@ -193,7 +210,11 @@ public class EditDataActivity extends AppCompatActivity
 
         total_time_in_bed_l = time_out_bed - time_to_bed;
         total_time_asleep_l = time_wake_up - time_to_sleep - time_to_fall_asleep - length_of_awakenings;
-        sleep_efficiency = (float)(total_time_asleep_l/total_time_in_bed_l);
+        total_time_in_bed = new Date(total_time_in_bed_l);
+        total_time_asleep = new Date(total_time_asleep_l);
+
+        sleep_efficiency = (float) total_time_asleep_l/total_time_in_bed_l;
+
     }
 
     /**
@@ -217,16 +238,26 @@ public class EditDataActivity extends AppCompatActivity
 
         tvTimeInBed.setText(sdfDuration.format(total_time_in_bed));
         tvSleepTime.setText(sdfDuration.format(total_time_asleep));
-        tvSleepEfficiency.setText(String.format ("%.3f",sleep_efficiency));
+        tvSleepEfficiency.setText(String.format ("%.1f %%",100*sleep_efficiency));
     }
 
     public void onClickDate(View view) {
-
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        DatePickerDialog dp = new DatePickerDialog(this, this,
+                cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
+        dp.show();
     }
 
     public void onClickTime(View view) {
         timePickerIdx = Integer.parseInt(view.getTag().toString()) ;
-        TimePickerDialog tp = new TimePickerDialog(this,this,0,0,false);
+        Calendar cal = Calendar.getInstance();
+        if (timePickerIdx < 4) {
+            cal.setTime(times[timePickerIdx]);
+        } else {
+            cal.setTime(durations[timePickerIdx - 4]);
+        }
+        TimePickerDialog tp = new TimePickerDialog(this,this,cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE),false);
         tp.show();
     }
 
@@ -245,14 +276,30 @@ public class EditDataActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year,month,day,0,0);
+        date_l = cal.getTimeInMillis();
+        date = new Date(date_l);
+        setDefaultTimes();
+        calculateData();
+        displayData();
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
         if (timePickerIdx < 4) {
-
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(Calendar.HOUR_OF_DAY,hourOfDay);
+            cal.set(Calendar.MINUTE,minute);
+            cal.set(Calendar.SECOND,0);
+            long time_in_ms = cal.getTimeInMillis();
+            if ((timePickerIdx > 0) && (time_in_ms < this.times_l[timePickerIdx-1])) {
+                time_in_ms += 24 * 60 * 60 * 1000;
+            }
+            this.times_l[timePickerIdx] = time_in_ms;
+            this.times[timePickerIdx] = new Date(time_in_ms);
         } else {
             long duration_in_ms = ((hourOfDay * 60) + minute) * 60 * 1000;
             this.durations_l[timePickerIdx - 4] = duration_in_ms;
@@ -262,10 +309,41 @@ public class EditDataActivity extends AppCompatActivity
         displayData();
     }
 
+    public void openDB() {
+        DBAgent =  DBAgent.getInstance(this);
+        DBAgent.open();
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+    public void closeDB() {
+        DBAgent.close();
+    }
+
+    public void onClearClicked(View view) {
+        DBAgent.deleteAll();
+    }
+
+    /**
+     * Goes to display activity
+     * @param view Button Done
+     */
     public void onEditDataDone(View view) {
         Intent returnIntent = getIntent();
         setResult(Activity.RESULT_OK, returnIntent);
+        Cursor cursor = DBAgent.getAll();
+        displayRecord(cursor);
+        //this.finish();
+    }
 
+    /**
+     * Enters data into database.
+     * @param view Button Enter Data in DB
+     */
+    public void enterDataInDatabase(View view){
         long time_to_bed = times_l[0];
         long time_to_sleep = times_l[1];
         long time_to_wake_up = times_l[2];
@@ -274,22 +352,20 @@ public class EditDataActivity extends AppCompatActivity
         long asleep = durations_l[0];
         long awake = durations_l[1];
         long nap_duration = durations_l[2];
-
-        long total_time_in_bed_l = time_out_bed - time_to_bed;
-        //long total_time_asleep_l = time_to_wake_up - time_to_sleep - asleep - awake;
-        //long sleep_efficiency = total_time_asleep_l/total_time_in_bed_l;
-
-        calculateData();
-
-        //Sent result to database
-        long rowId = DBAgent.insertRow( date_l,  time_to_bed, time_to_sleep, time_to_wake_up,
-                                    time_out_bed, asleep, awake, nap_duration, naps, quality);
-        if (rowId > 0){
-            tvDisplayTest.setText("Insert succeeded. RowId=" + rowId);
-        } else {
-            tvDisplayTest.setText("Insert failed.");
+        // check if a row exists
+        if(!DBAgent.checkIfRowExists(date_l)) {
+            //Send result to database
+            long rowId = DBAgent.insertRow(date_l, time_to_bed, time_to_sleep, time_to_wake_up,
+                    time_out_bed, asleep, awake, nap_duration,
+                    naps, quality, total_time_asleep_l, total_time_in_bed_l, sleep_efficiency);
+            if (rowId > 0) {
+                tvDisplayTest.setText("Insert succeeded. RowId=" + rowId);
+            } else {
+                tvDisplayTest.setText("Insert failed.");
+            }
+        }else{
+            tvDisplayTest.setText(R.string.already_in_db);
         }
-        this.finish();
     }
 
     /**
@@ -305,29 +381,10 @@ public class EditDataActivity extends AppCompatActivity
                 String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
                 Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
                 String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
-                Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
-                String timeSleepString = new SimpleDateFormat("HH:mm").format(new Time(time_to_sleep));
-                Long time_to_wake_up = cursor.getLong(DBAdapter.COL_TIME_TO_WAKE_UP);
-                String timeWakeString = new SimpleDateFormat("HH:mm").format(new Time(time_to_wake_up));
-                Long time_out_bed = cursor.getLong(DBAdapter.COL_TIME_OUT_BED);
-                String timeOutBedString = new SimpleDateFormat("HH:mm").format(new Time(time_out_bed));
-                Long asleep = cursor.getLong(DBAdapter.COL_ASLEEP);
-                String asleepString = new SimpleDateFormat("HH:mm").format(new Time(asleep));
-                Long awake = cursor.getLong(DBAdapter.COL_AWAKE);
-                String awakeString = new SimpleDateFormat("HH:mm").format(new Time(awake));
-                Long sleep_duration = cursor.getLong(DBAdapter.COL_SLEEP_DURATION);
-                String sleepDurationString = new SimpleDateFormat("HH:mm").format(new Time(sleep_duration));
-                Long bed_duration = cursor.getLong(DBAdapter.COL_BED_DURATION);
-                String bedDurationString = new SimpleDateFormat("HH:mm").format(new Time(bed_duration));
-                Long duration_nap = cursor.getLong(DBAdapter.COL_DURATION_NAP);
-                String durationNapString = new SimpleDateFormat("HH:mm").format(new Time(duration_nap));
-                String naps = cursor.getString(DBAdapter.COL_NAP);
-                int quality = cursor.getInt(DBAdapter.COL_QUALITY);
-                //float efficiency = cursor.getLong(DBAdapter.COL_EFFICIENCY);
-                //String efficiencyString = new SimpleDateFormat("HH:mm").format(new Time(efficiency));
+                //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
 
-                output += "date: " + dateString //+ " sleep: " + sleepDurationString
-                        + "bed: " + timeBedString + "\n";
+
+                output += "date: " + dateString + " time: " + timeBedString + "\n";
             } while (cursor.moveToNext());
             tvDisplayTest.setText(output);
             cursor.close();
@@ -337,9 +394,7 @@ public class EditDataActivity extends AppCompatActivity
     }
 
     public void onEditDataBack(View view) {
-        Cursor cursor = DBAgent.getAll();
-        displayRecord(cursor);
-        //this.finish();
+        this.finish();
     }
 
     // Below created by Android Studio Navigation Drawer Avtivity template

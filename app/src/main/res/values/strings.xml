@@ -32,6 +32,29 @@
     <string name="dateAlertDialogMessage">Pick a Date</string>
 
     <string name="sleep_quality_prompt">Choose a country</string>
+    <string name="set_time">Set Time</string>
+    <string name="question1">1. How long do you think it take you to fall asleep?</string>
+    <string name="question2">2. How long do you think you were awake durning the night?</string>
+    <string name="quetion3">3. Did you take any naps yesterday?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="question4">4. How would you rate your Sleep Quality last night?</string>
+    <string name="zero_time">00:00</string>
+    <string name="sleepefficiency">SleepEfficiency</string>
+    <string name="time_in_bed">Time In Bed</string>
+    <string name="time_asleep">Time Asleep</string>
+    <string name="sleep_quality">Sleep Quality</string>
+    <string name="naps">Naps</string>
+    <string name="any_naps_taken">Any Naps taken</string>
+    <string name="length_of_naps">Length of Naps</string>
+    <string name="length_of_awakenings">Length of Awakenings</string>
+    <string name="time_to_fall_asleep">Time to fall asleep</string>
+    <string name="date">Date</string>
+    <string name="time_awake">Time Awake</string>
+    <string name="enter_data_in_db">Enter Data in DB</string>
+    <string name="pick_date">Pick a Date</string>
+    <string name="please_choose_the_date">Please choose the date:</string>
+    <string name="already_in_db">Date is already in bd</string>
     <string-array name="sleep_quality_array">
         <item>1 (poor)</item>
         <item>2 </item>

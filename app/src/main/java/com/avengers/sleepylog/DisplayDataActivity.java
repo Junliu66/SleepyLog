@@ -30,13 +30,12 @@ import java.util.Date;
  * Display
  */
 public class DisplayDataActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+         DatePickerDialog.OnDateSetListener {
 
-    TextView tvTitle, tvDisplay;
-    Button btnPicker;
-    Spinner dropdown;
-    DBAdapter DBAgent;
-    int day, month, year;
+    private TextView tvDisplay;
+    private DBAdapter DBAgent;
+    private long pickedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,153 +55,105 @@ public class DisplayDataActivity extends AppCompatActivity
         // Above created by Android Studio Navigation Drawer Activity template
 
 
-        tvTitle = (TextView) findViewById(R.id.tvTitle);
-        tvDisplay = (TextView) findViewById(R.id.tvDisplay);
-        btnPicker = (Button)findViewById(R.id.btnPicker);
-        btnPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar calendar = Calendar.getInstance();
-                day = calendar.get(Calendar.DATE);
-                month = calendar.get(Calendar.MONTH);
-                year = calendar.get(Calendar.YEAR);
-                //tvDate.setText((month + 1) +"/" + day + "/" + year);
-                tvDisplay.setText("");
+        tvDisplay = (TextView)findViewById(R.id.tvDisplay);
+        final TextView tvPickStyle = (TextView)findViewById(R.id.tvTitle);
+        final Spinner dropdown = (Spinner)findViewById(R.id.spinner);
+        dropdown.setVisibility(View.VISIBLE);
+        tvPickStyle.setVisibility(View.VISIBLE);
 
-                DatePickerDialog myDateDialog = new DatePickerDialog(DisplayDataActivity.this, android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        year = i;
-                        month = i1;
-                        day = i2;
-                        tvDisplay.setText((month + 1) +"/" + day + "/" + year);
-                    }
-                }, year, month, day);
-                myDateDialog.setTitle(getResources().getString(R.string.dateAlertDialogTitle));
-                myDateDialog.setMessage(getResources().getString(R.string.dateAlertDialogMessage));
-                myDateDialog.show();
-            }
-        });
-
-        //dropdown = (Spinner) findViewById(R.id.spinner);
-        //dropdown.setVisibility(View.VISIBLE);
-        //tvPickStyle.setVisibility(View.VISIBLE);
-
-    }
-/**
         String[] items = new String[]{
-                "None",
                 "Time to bed",
                 "Time to sleep",
                 "Time to wake up",
                 "Time out of bed",
                 "How long to fall asleep",
-                "How long to wake up",
                 "Take nap",
                 "Rate your sleep quality"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
 
-        Cursor cursor;
-        //dropdown = (Spinner)findViewById(R.id.spinner);
-        switch (dropdown.getSelectedItemPosition()) {
-            case 0:
-                tvDisplay.setText(dropdown.getSelectedItemPosition());
-                //tvDisplay.setText("haha");
-                //Cursor cursor = DBAgent.getAll();
-                //displayRecords(cursor);
-                break;
-            case 1:
-                tvDisplay.setText("haha");
-                cursor = DBAgent.getAll();
-                displayRecord(cursor, items[1]);
-                break;
-            case 2:
-                cursor = DBAgent.getAll();
-                displayRecord(cursor, items[2]);
-                break;
-            case 3:
-                cursor = DBAgent.getAll();
-                displayRecord(cursor, items[3]);
-                break;
-            case 4:
-                cursor = DBAgent.getAll();
-                displayRecord(cursor, items[4]);
-                break;
-            case 5:
-                cursor = DBAgent.getAll();
-                displayRecord(cursor, items[5]);
-                break;
-            case 6:
-                cursor = DBAgent.getAll();
-                displayRecord(cursor, items[6]);
-                break;
-            case 7:
-                cursor = DBAgent.getAll();
-                displayRecord(cursor, items[7]);
-                break;
-            case 8:
-                cursor = DBAgent.getAll();
-                displayRecord(cursor, items[8]);
-                break;
-        }
-        //openDB();
+        openDB();
+
 
     }
 
-    public  void displayRecord(Cursor cursor, String item){
+    /**
+     *
+     * @param view Button Pick a date
+     */
+    public void onClickChooseDate(View view) {
+        Calendar cal = Calendar.getInstance();
+        //cal.setTime(date);
+        DatePickerDialog dp = new DatePickerDialog(this, this,
+                cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
+        dp.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year,month,dayOfMonth,0,0);
+        pickedDate = cal.getTimeInMillis();
+        tvDisplay.setText(String.format("%d %d %d", year,month,dayOfMonth));
+        showEntryByDate();
+    }
+
+    public void openDB() {
+        DBAgent = DBAgent.getInstance(this);
+        DBAgent.open();
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+    public void closeDB() {
+        DBAgent.close();
+    }
+
+    public void onClearClicked(View view) {
+        //DBAgent.deleteAll();
+        showAllEntries();
+    }
+
+    /**
+     * Tests database table.
+     * @param cursor
+     */
+    public  void displayRecord(Cursor cursor){
         if(cursor.getCount() > 0){
             cursor.moveToFirst();
-            String output = "";
-            tvDisplay.setText("Date" + "\t\t" + item);
-            String dataString = "";
+            StringBuilder output = new StringBuilder();
             do {
                 Long date = cursor.getLong(DBAdapter.COL_DATE);
                 String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
-                switch (item) {
-                    case "Time to bed":
-                        Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
-                        dataString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
-                        break;
-                    case "Time to sleep":
-                        Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
-                        dataString = new SimpleDateFormat("HH:mm").format(new Time(time_to_sleep));
-                        break;
-                    case "Time to wake up":
-                        Long time_to_wake_up = cursor.getLong(DBAdapter.COL_TIME_TO_WAKE_UP);
-                        dataString = new SimpleDateFormat("HH:mm").format(new Time(time_to_wake_up));
-                        break;
-                    case "Time out of bed":
-                        Long time_out_bed = cursor.getLong(DBAdapter.COL_TIME_OUT_BED);
-                        dataString = new SimpleDateFormat("HH:mm").format(new Time(time_out_bed));
-                        break;
-                    case "How long to fall asleep":
-                        Long asleep = cursor.getLong(DBAdapter.COL_ASLEEP);
-                        dataString  = new SimpleDateFormat("HH:mm").format(new Time(asleep));
-                        break;
-                    case "How long to wake up":
-                        Long awake = cursor.getLong(DBAdapter.COL_AWAKE);
-                        dataString = new SimpleDateFormat("HH:mm").format(new Time(awake));
-                        break;
-                    case "Take nap":
-                        String naps = cursor.getString(DBAdapter.COL_NAP);
-                        Long duration_nap = cursor.getLong(DBAdapter.COL_DURATION_NAP);
-                        dataString = new SimpleDateFormat("HH:mm").format(new Time(duration_nap));
-                        break;
-                    case "Rate your sleep quality":
-                        dataString = String.valueOf(cursor.getInt(DBAdapter.COL_QUALITY));
-                        break;
-                }
+                Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
+                String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
+                //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
 
-                output += date + "\t\t" + dataString + "\n";
+
+                output.append("date: ").append(dateString).append(" time: ").append(timeBedString).append("\n");
             } while (cursor.moveToNext());
-            tvDisplay.setText(output);
+            tvDisplay.setText(output.toString());
             cursor.close();
         } else {
             tvDisplay.setText("The database is empty.");
         }
     }
+
+    public void showAllEntries(){
+        Cursor cursor = DBAgent.getAll();
+        displayRecord(cursor);
+    }
+
+    //retrieve records by date
+    public void showEntryByDate(){
+        Cursor cursor = DBAgent.getRowByPrimaryKey(pickedDate);
+        displayRecord(cursor);
+    }
+
     public void showData(View v) {
         Spinner dropdown = (Spinner)findViewById(R.id.spinner);
         switch (dropdown.getSelectedItemPosition()) {
@@ -224,18 +175,10 @@ public class DisplayDataActivity extends AppCompatActivity
             case 6:
                 break;
         }
-    }**/
-
-
-    public void displayRecords(Cursor cursor) {
-
-
     }
 
-    public void onClearClicked(View view) {
 
-        DBAgent.deleteAll();
-    }
+
 
     public void onDisplayDataDone(View view) {
         this.finish();
@@ -298,4 +241,5 @@ public class DisplayDataActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

@@ -1,63 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.avengers.sleepylog.DisplayDataActivity"
     tools:showIn="@layout/app_bar_display_data">
-
-    <Button
-        android:id="@+id/btnDisplayDataDone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Done"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:onClick="onDisplayDataDone"/>
-
-    <Button
-        android:id="@+id/btnClear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Clear"
-        android:onClick="onClearClicked"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please choose the data you want to see"
+        android:text="@string/please_choose_the_date"
         android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/btnPicker"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="296dp"
-        android:layout_marginStart="296dp"
-        android:layout_marginTop="30dp"
-        android:gravity="center_horizontal|center"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="32dp"
+         />
 
     <TextView
         android:id="@+id/tvDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="60dp"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnPickDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickChooseDate"
+            android:text="@string/pick_date" />
+
+        <Button
+            android:id="@+id/btnDisplayDataDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onDisplayDataDone"
+            android:text="Done" />
+
+        <Button
+            android:id="@+id/btnClear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClearClicked"
+            android:text="Clear" />
+
+    </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

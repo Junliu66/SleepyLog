@@ -11,14 +11,16 @@ import android.util.Log;
 import java.io.File;
 
 /**
- * Created by zhangJunliu on 12/5/17.
+ * Database storing.
  */
 
-public class DBAdapter extends AppCompatActivity {
+public final class DBAdapter extends AppCompatActivity {
+
+    private static DBAdapter sInstance;
 
     private static final String DATABASE_NAME = "MYDB";
     private static final String DATABASE_TABLE = "MYDBTABLE";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String KEY_DATE = "date";
     private static final String KEY_TIME_TO_BED = "time_to_bed";
@@ -27,12 +29,13 @@ public class DBAdapter extends AppCompatActivity {
     private static final String KEY_TIME_OUT_BED = "time_out_bed";
     private static final String KEY_ASLEEP = "asleep";
     private static final String KEY_AWAKE = "awake";
-    private static final String KEY_DURATION_SLEEP = "sleep_duration";
-    private static final String KEY_DURATION_BED = "on_bed_duration";
     private static final String KEY_DURATION_NAP = "nap_duration";
     private static final String KEY_NAP = "naps";
     private static final String KEY_QUALITY = "quality";
-    //private static final String KEY_EFFICIENCY = "efficiency";
+    private static final String KEY_TOTAL_TIME_ASLEEP = "total_time_asleep";
+    private static final String KEY_TOTAL_TIME_IN_BED = "total_time_in_bed";
+    private static final String KEY_SLEEP_EFFICIENCY = "sleep_efficiency";
+
 
     protected static final int COL_DATE = 0;
     protected static final int COL_TIME_TO_BED = 1;
@@ -41,23 +44,30 @@ public class DBAdapter extends AppCompatActivity {
     protected static final int COL_TIME_OUT_BED = 4;
     protected static final int COL_ASLEEP = 5;
     protected static final int COL_AWAKE = 6;
-    protected static final int COL_SLEEP_DURATION = 7;
-    protected static final int COL_BED_DURATION = 8;
-    protected static final int COL_DURATION_NAP = 9;
-    protected static final int COL_NAP = 10;
-    protected static final int COL_QUALITY = 11;
-    //protected static final int COL_EFFICIENCY = 12;
+    protected static final int COL_DURATION_NAP = 7;
+    protected static final int COL_NAP = 8;
+    protected static final int COL_QUALITY = 9;
+    protected static final int COL_TOTAL_TIME_ASLEEP = 10;
+    protected static final int COL_TOTAL_TIME_IN_BED = 11;
+    protected static final int COL_SLEEP_EFFICIENCY = 12;
 
     private static final String[] ALL_KEYS = {KEY_DATE, KEY_TIME_TO_BED, KEY_TIME_TO_SLEEP, KEY_TIME_TO_WAKE_UP, KEY_TIME_OUT_BED,
-            KEY_ASLEEP, KEY_AWAKE, KEY_DURATION_NAP, KEY_NAP, KEY_QUALITY};
+            KEY_ASLEEP, KEY_AWAKE, KEY_DURATION_NAP, KEY_NAP, KEY_QUALITY, KEY_TOTAL_TIME_ASLEEP, KEY_TOTAL_TIME_IN_BED, KEY_SLEEP_EFFICIENCY};
 
     private Context context;
     private SQLiteDatabase db;
     private DatabaseHelper myDBHelper;
 
-    public DBAdapter(Context context) {
+    public static synchronized DBAdapter getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new DBAdapter(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    private DBAdapter(Context context){
         this.context = context;
-        myDBHelper = new DatabaseHelper(context);
+        myDBHelper = DatabaseHelper.getInstance(context);
     }
 
     public DBAdapter open() {
@@ -73,7 +83,8 @@ public class DBAdapter extends AppCompatActivity {
 
     public long insertRow(long date, long time_to_bed, long  time_to_sleep, long time_to_wake_up,
                           long time_out_bed, long asleep, long awake, long nap_duration,
-                          boolean naps, int quality) {
+                          boolean naps, int quality, long total_time_asleep,
+                          long total_time_in_bed, float sleep_efficiency) {
         ContentValues values = new ContentValues();
         values.put(KEY_DATE, date);
         values.put(KEY_TIME_TO_BED, time_to_bed);
@@ -85,9 +96,10 @@ public class DBAdapter extends AppCompatActivity {
         values.put(KEY_DURATION_NAP, nap_duration);
         values.put(KEY_NAP, naps);
         values.put(KEY_QUALITY, quality);
-        //values.put(KEY_DURATION_BED, total_time_in_bed_l);
-        //values.put(KEY_DURATION_SLEEP, total_time_asleep_l);
-        //values.put(KEY_EFFICIENCY, efficiency);
+        values.put(KEY_TOTAL_TIME_ASLEEP, total_time_asleep);
+        values.put(KEY_TOTAL_TIME_IN_BED, total_time_in_bed);
+        values.put(KEY_SLEEP_EFFICIENCY, sleep_efficiency);
+
 
         long rowid = db.insert(DATABASE_TABLE, null, values);
         return rowid;
@@ -101,6 +113,19 @@ public class DBAdapter extends AppCompatActivity {
 
         }
         return cursor;
+    }
+
+    public Cursor getRowByPrimaryKey(long date){
+        String whereStr = " date = "+ date;
+        ///SELECT * FROM Person WHERE Name = 'B';
+       return db.query(DATABASE_TABLE, ALL_KEYS, whereStr, null, null, null, null, null);
+
+    }
+
+    public boolean checkIfRowExists(long date){
+        String whereStr = " date = "+ date;
+        Cursor cursor = db.query(DATABASE_TABLE, ALL_KEYS, whereStr, null, null, null, null, null);
+        return (cursor.getCount() > 0);
     }
 
     public boolean deleteRow(long rowid) {
@@ -119,9 +144,18 @@ public class DBAdapter extends AppCompatActivity {
         }
     }
 
-    class DatabaseHelper extends SQLiteOpenHelper {
+    final static class DatabaseHelper extends SQLiteOpenHelper {
 
-        public DatabaseHelper(Context context) {
+        private static DatabaseHelper databaseHelper;
+
+        public static synchronized DatabaseHelper getInstance(Context context) {
+            if (databaseHelper == null) {
+                databaseHelper = new DatabaseHelper(context);
+            }
+            return databaseHelper;
+        }
+
+        private DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
@@ -138,9 +172,10 @@ public class DBAdapter extends AppCompatActivity {
                     + KEY_AWAKE + " LONG, "
                     + KEY_DURATION_NAP + " LONG, "
                     + KEY_NAP + " BOOLEAN, "
-                    + KEY_QUALITY + " INTEGER);";
-                    //+ KEY_DURATION_SLEEP + " LONG, "
-                    //+ KEY_DURATION_BED + " LONG);";
+                    + KEY_QUALITY + " INTEGER, "
+                    + KEY_TOTAL_TIME_ASLEEP + " LONG, "
+                    + KEY_TOTAL_TIME_IN_BED + " LONG, "
+                    + KEY_SLEEP_EFFICIENCY + " FLOAT);";
             db.execSQL(CREATE_DB_SQL);
         }
 
