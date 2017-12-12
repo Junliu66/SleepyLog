@@ -38,10 +38,6 @@ public class NewHelpActivity extends AppCompatActivity
 
     }
 
-    public void onHelpDone(View view) {
-        this.finish();
-    }
-
     // Below created by Android Studio Navigation Drawer Avtivity template
 
     @Override
