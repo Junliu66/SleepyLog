@@ -121,8 +121,10 @@ public class EditDataActivity extends AppCompatActivity
         spnSleepQuality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                quality = position+1;
-                tvQuality.setText("qual: " + String.valueOf(quality));
+                if (spnSleepQuality.getVisibility() == View.VISIBLE) {
+                    tvQuality.setText("qual: " + String.valueOf(quality));
+                    spnSleepQuality.setVisibility(View.INVISIBLE);
+                }
                 spnSleepQuality.setVisibility(View.INVISIBLE);
             }
 
