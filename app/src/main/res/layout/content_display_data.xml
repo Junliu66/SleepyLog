@@ -96,7 +96,7 @@
             android:layout_weight="1"
             android:onClick="showAllEntries"
             android:text="@string/print_db" />
-
+<!--
         <Button
             android:id="@+id/btnClear"
             android:layout_width="wrap_content"
@@ -104,7 +104,7 @@
             android:layout_weight="1"
             android:onClick="onClearClicked"
             android:text="@string/clear" />
-
+-->
     </LinearLayout>
 
 
