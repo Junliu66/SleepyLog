@@ -99,7 +99,7 @@ public class DisplayDataActivity extends AppCompatActivity
         Calendar cal = Calendar.getInstance();
         cal.set(year,month,dayOfMonth,0,0);
 
-        pickedDate =  new SimpleDateFormat("MM/dd/yyyy").format(new Date(cal.getTimeInMillis() ));
+        pickedDate =  new SimpleDateFormat("MM/dd/yyyy").format(new Date(cal.getTimeInMillis()));
         tvcalendarDate1.setText(pickedDate);
         showEntryByDate();
     }
@@ -162,14 +162,24 @@ public class DisplayDataActivity extends AppCompatActivity
         Cursor cursor = DBAgent.getRowByPrimaryKey(pickedDate);
         //displayRecord(cursor);
         StringBuilder output = new StringBuilder();
-        if(cursor.getCount() > 0) {
+        if(cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
             String date = cursor.getString(DBAdapter.COL_DATE);
 
             Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
             String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
-            //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
-            //String timeString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(time_to_sleep));
-            output.append("date: ").append(date).append(" time: ").append(timeBedString).append("\n");
+            Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
+            String timeString = new SimpleDateFormat("HH:mm").format(new Time(time_to_sleep));
+            Long total_time_asleep = cursor.getLong(DBAdapter.COL_TOTAL_TIME_ASLEEP);
+            String timeAsleepString = new SimpleDateFormat("HH:mm").format(new Time(total_time_asleep));
+            Long total_time_in_bed = cursor.getLong(DBAdapter.COL_TOTAL_TIME_IN_BED);
+            String timeInBedString = new SimpleDateFormat("HH:mm").format(new Time(total_time_in_bed));
+
+            output.append("date: ").append(date).append("\ntime to bed: ").append(timeBedString);
+            output.append("\ntime to sleep: ").append(timeString).append("\ntotal time asleep: ").append(timeAsleepString);
+            output.append("\ntotal time in bed: ").append(timeInBedString);
+
+            tvDisplay.setText(output);
         } else {
             tvDisplay.setText("For picked date: " + tvcalendarDate1.getText().toString() + " entry is not found");
         }
