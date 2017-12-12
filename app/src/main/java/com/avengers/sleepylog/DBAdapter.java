@@ -20,7 +20,7 @@ public final class DBAdapter extends AppCompatActivity {
 
     private static final String DATABASE_NAME = "MYDB";
     private static final String DATABASE_TABLE = "MYDBTABLE";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String KEY_DATE = "date";
     private static final String KEY_TIME_TO_BED = "time_to_bed";
@@ -100,17 +100,16 @@ public final class DBAdapter extends AppCompatActivity {
         values.put(KEY_TOTAL_TIME_IN_BED, total_time_in_bed);
         values.put(KEY_SLEEP_EFFICIENCY, sleep_efficiency);
 
-
         long rowid = db.insert(DATABASE_TABLE, null, values);
         return rowid;
 
     }
 
     public Cursor getAll() {
-        Cursor cursor = db.query(DATABASE_TABLE, ALL_KEYS, null, null, null, null, null, null);
-        if (cursor.getCount() != 0) {
+        Cursor cursor = db.query(true, DATABASE_TABLE, ALL_KEYS, null,
+                null, null, null, null, null);
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
-
         }
         return cursor;
     }
@@ -128,22 +127,26 @@ public final class DBAdapter extends AppCompatActivity {
         return (cursor.getCount() > 0);
     }
 
-    public boolean deleteRow(long rowid) {
-        String whereStr = KEY_DATE + " = "+ rowid;
+    public boolean deleteRow(long rowId){
+        String whereStr = KEY_DATE + "=" + rowId;
         return db.delete(DATABASE_TABLE, whereStr, null) > 0;
     }
 
     public void deleteAll() {
         Cursor cursor = getAll();
-        long rowid = cursor.getColumnIndexOrThrow(KEY_DATE);
+        int rowIdX = cursor.getColumnIndexOrThrow(KEY_DATE);
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
-                deleteRow(cursor.getLong((int) rowid));
+                deleteRow(cursor.getLong(rowIdX));
             } while (cursor.moveToNext());
         }
     }
 
+
+    /**
+     * Database Open Helper
+     */
     final static class DatabaseHelper extends SQLiteOpenHelper {
 
         private static DatabaseHelper databaseHelper;
