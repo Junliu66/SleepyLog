@@ -27,4 +27,43 @@
     <string name="avengers">复仇者小组</string>
     <string name="team_members">Kevin Ball, Victoria Larina, Junliu Zhang</string>
 
+    <string name="sleep_quality_prompt">选择一个国家</string>
+    <string name="set_time">设置时间</string>
+    <string name="question1">1. 你觉得需要多久才能入睡?</string>
+    <string name="question2">2. 你觉得一晚要醒来多长时间？</string>
+    <string name="quetion3">3. 你昨天小憩了吗</string>
+    <string name="yes">有</string>
+    <string name="no">没有</string>
+    <string name="question4">4. 你如何评价你的睡眠质量</string>
+    <string name="zero_time">00:00</string>
+    <string name="sleepefficiency">睡眠效率</string>
+    <string name="time_in_bed">床上时长</string>
+    <string name="time_asleep">入睡时长</string>
+    <string name="sleep_quality">睡眠质量</string>
+    <string name="naps">小憩</string>
+    <string name="any_naps_taken">小憩</string>
+    <string name="length_of_naps">小憩时长</string>
+    <string name="length_of_awakenings">醒来时长</string>
+    <string name="time_to_fall_asleep">入睡时间</string>
+    <string name="date">日期</string>
+    <string name="time_awake">醒来时间</string>
+    <string name="enter_data_in_db">输入数据</string>
+    <string name="pick_date">选择一个日期</string>
+    <string name="please_choose_the_date">请选择一个日期:</string>
+    <string name="already_in_db">日期已在数据库</string>
+    <string name="print_db">打印数据</string>
+    <string name="clear">清除</string>
+    <string name="date_picked">已选择日期</string>
+    <string name="home">主页</string>
+    <string name="edit_data">编辑数据</string>
+    <string name="display_data">显示数据</string>
+    <string name="help">帮助</string>
+    <string-array name="sleep_quality_array">
+        <item>1 (不好)</item>
+        <item>2 </item>
+        <item>3 </item>
+        <item>4 </item>
+        <item>5 (极好)</item>
+    </string-array>
+
 </resources>
