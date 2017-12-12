@@ -17,7 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -66,6 +68,8 @@ public class EditDataActivity extends AppCompatActivity
     TextView tvTimeInBed;
     TextView tvSleepEfficiency;
 
+    Spinner spnSleepQuality;
+
     private DBAdapter DBAgent;
     TextView tvDisplayTest;
 
@@ -112,6 +116,21 @@ public class EditDataActivity extends AppCompatActivity
         tvSleepTime = (TextView) findViewById(R.id.tvSleepTime);
         tvTimeInBed = (TextView) findViewById(R.id.tvTimeinBed);
         tvSleepEfficiency = (TextView) findViewById(R.id.tvSleepEfficiency);
+
+        spnSleepQuality = (Spinner)findViewById(R.id.spinnerSleepQuality);
+        spnSleepQuality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                quality = position+1;
+                tvQuality.setText("qual: " + String.valueOf(quality));
+                spnSleepQuality.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         times_l = new long[4];
         times = new Date[4];
@@ -161,6 +180,7 @@ public class EditDataActivity extends AppCompatActivity
      */
     public void  setDefaultDate() {
         date_l = Calendar.getInstance().getTime().getTime();
+        date = new Date(date_l);
     }
 
     /**
@@ -214,6 +234,7 @@ public class EditDataActivity extends AppCompatActivity
         total_time_asleep = new Date(total_time_asleep_l);
 
         sleep_efficiency = (float) total_time_asleep_l/total_time_in_bed_l;
+        naps = (nap_duration != 0);
 
     }
 
@@ -272,6 +293,7 @@ public class EditDataActivity extends AppCompatActivity
     }
 
     public void onClickSleepQuality(View view) {
+        spnSleepQuality.setVisibility(View.VISIBLE);
 
     }
 
@@ -305,6 +327,9 @@ public class EditDataActivity extends AppCompatActivity
             this.durations_l[timePickerIdx - 4] = duration_in_ms;
             this.durations[timePickerIdx - 4] = new Date(duration_in_ms);
         }
+        if (timePickerIdx == 6) {
+            naps = (this.durations_l[2] != 0);
+        }
         calculateData();
         displayData();
     }
@@ -334,9 +359,9 @@ public class EditDataActivity extends AppCompatActivity
     public void onEditDataDone(View view) {
         Intent returnIntent = getIntent();
         setResult(Activity.RESULT_OK, returnIntent);
-        Cursor cursor = DBAgent.getAll();
-        displayRecord(cursor);
-        //this.finish();
+        //Cursor cursor = DBAgent.getAll();
+        //displayRecord(cursor);
+        this.finish();
     }
 
     /**
@@ -353,15 +378,17 @@ public class EditDataActivity extends AppCompatActivity
         long awake = durations_l[1];
         long nap_duration = durations_l[2];
         // check if a row exists
-        if(!DBAgent.checkIfRowExists(date_l)) {
+        //String stringDate = DateFormat.getDateInstance().format(date_l);
+        String stringDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date_l));
+        if(!DBAgent.checkIfRowExists(stringDate)) {
             //Send result to database
-            long rowId = DBAgent.insertRow(date_l, time_to_bed, time_to_sleep, time_to_wake_up,
+            long rowId = DBAgent.insertRow(stringDate, time_to_bed, time_to_sleep, time_to_wake_up,
                     time_out_bed, asleep, awake, nap_duration,
                     naps, quality, total_time_asleep_l, total_time_in_bed_l, sleep_efficiency);
             if (rowId > 0) {
                 tvDisplayTest.setText("Insert succeeded. RowId=" + rowId);
             } else {
-                tvDisplayTest.setText("Insert failed.");
+                tvDisplayTest.setText("Insert failed. stringDate: " + stringDate);
             }
         }else{
             tvDisplayTest.setText(R.string.already_in_db);
@@ -377,14 +404,13 @@ public class EditDataActivity extends AppCompatActivity
             cursor.moveToFirst();
             String output = "";
             do {
-                Long date = cursor.getLong(DBAdapter.COL_DATE);
-                String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
+                String date = cursor.getString(DBAdapter.COL_DATE);
+                //String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
                 Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
                 String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
                 //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
 
-
-                output += "date: " + dateString + " time: " + timeBedString + "\n";
+                output += "date: " + date + " time: " + timeBedString + "\n";
             } while (cursor.moveToNext());
             tvDisplayTest.setText(output);
             cursor.close();
@@ -436,18 +462,17 @@ public class EditDataActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_main) {
+            Intent newAct = new Intent(this, MainActivity.class);
+            startActivity(newAct);
+        } else if (id == R.id.nav_edit_data) {
+            // Do nothing
+        } else if (id == R.id.nav_display_data) {
+            Intent newAct = new Intent(this, DisplayDataActivity.class);
+            startActivity(newAct);
+        } else if (id == R.id.nav_help) {
+            Intent newAct = new Intent(this, NewHelpActivity.class);
+            startActivity(newAct);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

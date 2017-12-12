@@ -1,6 +1,7 @@
 package com.avengers.sleepylog;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -35,7 +36,9 @@ public class DisplayDataActivity extends AppCompatActivity
 
     private TextView tvDisplay;
     private DBAdapter DBAgent;
-    private long pickedDate;
+    private String pickedDate;
+    private TextView tvcalendarDate1;
+    //private TextView tvcalendarDate2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +57,13 @@ public class DisplayDataActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         // Above created by Android Studio Navigation Drawer Activity template
 
-
+        tvcalendarDate1 = findViewById(R.id.calendarDate1);
+       // tvcalendarDate2 = findViewById(R.id.calendarDate2);
         tvDisplay = (TextView)findViewById(R.id.tvDisplay);
         final TextView tvPickStyle = (TextView)findViewById(R.id.tvTitle);
-        final Spinner dropdown = (Spinner)findViewById(R.id.spinner);
-        dropdown.setVisibility(View.VISIBLE);
-        tvPickStyle.setVisibility(View.VISIBLE);
+        //final Spinner dropdown = (Spinner)findViewById(R.id.spinner);
+        //dropdown.setVisibility(View.VISIBLE);
+        //tvPickStyle.setVisibility(View.VISIBLE);
 
         String[] items = new String[]{
                 "Time to bed",
@@ -70,8 +74,8 @@ public class DisplayDataActivity extends AppCompatActivity
                 "Take nap",
                 "Rate your sleep quality"
         };
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(adapter);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        //dropdown.setAdapter(adapter);
 
         openDB();
 
@@ -94,8 +98,9 @@ public class DisplayDataActivity extends AppCompatActivity
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar cal = Calendar.getInstance();
         cal.set(year,month,dayOfMonth,0,0);
-        pickedDate = cal.getTimeInMillis();
-        tvDisplay.setText(String.format("%d %d %d", year,month,dayOfMonth));
+
+        pickedDate =  new SimpleDateFormat("MM/dd/yyyy").format(new Date(cal.getTimeInMillis() ));
+        tvcalendarDate1.setText(pickedDate);
         showEntryByDate();
     }
 
@@ -113,9 +118,17 @@ public class DisplayDataActivity extends AppCompatActivity
         DBAgent.close();
     }
 
+    /**
+     *
+     * @param view Button Clear
+     */
     public void onClearClicked(View view) {
-        //DBAgent.deleteAll();
-        showAllEntries();
+        DBAgent.deleteAll();
+    }
+
+    public void showAllEntries(View view){
+        Cursor cursor = DBAgent.getAll();
+        displayRecord(cursor);
     }
 
     /**
@@ -127,14 +140,13 @@ public class DisplayDataActivity extends AppCompatActivity
             cursor.moveToFirst();
             StringBuilder output = new StringBuilder();
             do {
-                Long date = cursor.getLong(DBAdapter.COL_DATE);
-                String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(date));
+                String date = cursor.getString(DBAdapter.COL_DATE);
                 Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
                 String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
                 //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
 
 
-                output.append("date: ").append(dateString).append(" time: ").append(timeBedString).append("\n");
+                output.append("date: ").append(date).append(" time: ").append(timeBedString).append("\n");
             } while (cursor.moveToNext());
             tvDisplay.setText(output.toString());
             cursor.close();
@@ -143,42 +155,25 @@ public class DisplayDataActivity extends AppCompatActivity
         }
     }
 
-    public void showAllEntries(){
-        Cursor cursor = DBAgent.getAll();
-        displayRecord(cursor);
-    }
-
-    //retrieve records by date
+    /**
+     * retrieve records by date
+     */
     public void showEntryByDate(){
         Cursor cursor = DBAgent.getRowByPrimaryKey(pickedDate);
-        displayRecord(cursor);
-    }
+        //displayRecord(cursor);
+        StringBuilder output = new StringBuilder();
+        if(cursor.getCount() > 0) {
+            String date = cursor.getString(DBAdapter.COL_DATE);
 
-    public void showData(View v) {
-        Spinner dropdown = (Spinner)findViewById(R.id.spinner);
-        switch (dropdown.getSelectedItemPosition()) {
-            case 0:
-                tvDisplay.setText("haha");
-                //Cursor cursor = DBAgent.getAll();
-                //displayRecords(cursor);
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
+            Long time_to_bed = cursor.getLong(DBAdapter.COL_TIME_TO_BED);
+            String timeBedString = new SimpleDateFormat("HH:mm").format(new Time(time_to_bed));
+            //Long time_to_sleep = cursor.getLong(DBAdapter.COL_TIME_TO_SLEEP);
+            //String timeString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(time_to_sleep));
+            output.append("date: ").append(date).append(" time: ").append(timeBedString).append("\n");
+        } else {
+            tvDisplay.setText("For picked date: " + tvcalendarDate1.getText().toString() + " entry is not found");
         }
     }
-
-
-
 
     public void onDisplayDataDone(View view) {
         this.finish();
@@ -223,19 +218,19 @@ public class DisplayDataActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_main) {
+            Intent newAct = new Intent(this, MainActivity.class);
+            startActivity(newAct);
+        } else if (id == R.id.nav_edit_data) {
+            Intent newAct = new Intent(this, EditDataActivity.class);
+            startActivity(newAct);
+        } else if (id == R.id.nav_display_data) {
+            // Do nothing
+        } else if (id == R.id.nav_help) {
+            Intent newAct = new Intent(this, NewHelpActivity.class);
+            startActivity(newAct);
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

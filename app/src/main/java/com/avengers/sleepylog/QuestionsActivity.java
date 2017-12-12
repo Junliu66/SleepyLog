@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,11 +19,8 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -214,18 +209,21 @@ public class QuestionsActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_main) {
+            Intent newAct = new Intent(this, MainActivity.class);
+            startActivity(newAct);
+            //Intent returnIntent = getIntent();
+            //setResult(Activity.RESULT_CANCELED, returnIntent);
+            //this.finish();
+        } else if (id == R.id.nav_edit_data) {
+            Intent newAct = new Intent(this, EditDataActivity.class);
+            startActivity(newAct);
+        } else if (id == R.id.nav_display_data) {
+            Intent newAct = new Intent(this, DisplayDataActivity.class);
+            startActivity(newAct);
+        } else if (id == R.id.nav_help) {
+            Intent newAct = new Intent(this, NewHelpActivity.class);
+            startActivity(newAct);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

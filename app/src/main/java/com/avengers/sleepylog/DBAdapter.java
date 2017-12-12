@@ -20,7 +20,7 @@ public final class DBAdapter extends AppCompatActivity {
 
     private static final String DATABASE_NAME = "MYDB";
     private static final String DATABASE_TABLE = "MYDBTABLE";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String KEY_DATE = "date";
     private static final String KEY_TIME_TO_BED = "time_to_bed";
@@ -81,7 +81,7 @@ public final class DBAdapter extends AppCompatActivity {
         myDBHelper.close();
     }
 
-    public long insertRow(long date, long time_to_bed, long  time_to_sleep, long time_to_wake_up,
+    public long insertRow(String date, long time_to_bed, long  time_to_sleep, long time_to_wake_up,
                           long time_out_bed, long asleep, long awake, long nap_duration,
                           boolean naps, int quality, long total_time_asleep,
                           long total_time_in_bed, float sleep_efficiency) {
@@ -100,50 +100,53 @@ public final class DBAdapter extends AppCompatActivity {
         values.put(KEY_TOTAL_TIME_IN_BED, total_time_in_bed);
         values.put(KEY_SLEEP_EFFICIENCY, sleep_efficiency);
 
-
         long rowid = db.insert(DATABASE_TABLE, null, values);
         return rowid;
 
     }
 
     public Cursor getAll() {
-        Cursor cursor = db.query(DATABASE_TABLE, ALL_KEYS, null, null, null, null, null, null);
-        if (cursor.getCount() != 0) {
+        Cursor cursor = db.query(true, DATABASE_TABLE, ALL_KEYS, null,
+                null, null, null, null, null);
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
-
         }
         return cursor;
     }
 
-    public Cursor getRowByPrimaryKey(long date){
+    public Cursor getRowByPrimaryKey(String date){
         String whereStr = " date = "+ date;
         ///SELECT * FROM Person WHERE Name = 'B';
-       return db.query(DATABASE_TABLE, ALL_KEYS, whereStr, null, null, null, null, null);
-
+        Cursor cursor = db.query(DATABASE_TABLE, ALL_KEYS, whereStr, null, null, null, null, null);
+        return cursor;
     }
 
-    public boolean checkIfRowExists(long date){
+    public boolean checkIfRowExists(String date){
         String whereStr = " date = "+ date;
         Cursor cursor = db.query(DATABASE_TABLE, ALL_KEYS, whereStr, null, null, null, null, null);
         return (cursor.getCount() > 0);
     }
 
-    public boolean deleteRow(long rowid) {
-        String whereStr = KEY_DATE + " = "+ rowid;
+    public boolean deleteRow(long rowId){
+        String whereStr = KEY_DATE + "=" + rowId;
         return db.delete(DATABASE_TABLE, whereStr, null) > 0;
     }
 
     public void deleteAll() {
         Cursor cursor = getAll();
-        long rowid = cursor.getColumnIndexOrThrow(KEY_DATE);
+        int rowIdX = cursor.getColumnIndexOrThrow(KEY_DATE);
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
-                deleteRow(cursor.getLong((int) rowid));
+                deleteRow(cursor.getLong(rowIdX));
             } while (cursor.moveToNext());
         }
     }
 
+
+    /**
+     * Database Open Helper
+     */
     final static class DatabaseHelper extends SQLiteOpenHelper {
 
         private static DatabaseHelper databaseHelper;
@@ -163,7 +166,7 @@ public final class DBAdapter extends AppCompatActivity {
         public void onCreate(SQLiteDatabase db) {
             //CREATE TABLE ARTISTS(ID INTEGER PRIMARY KEY, NAME TEXT);
             String CREATE_DB_SQL = "CREATE TABLE " + DATABASE_TABLE
-                    + " ( " + KEY_DATE + " LONG PRIMARY KEY, "
+                    + " ( " + KEY_DATE + " STRING PRIMARY KEY, "
                     + KEY_TIME_TO_BED + " LONG, "
                     + KEY_TIME_TO_SLEEP + " LONG, "
                     + KEY_TIME_TO_WAKE_UP + " LONG, "
