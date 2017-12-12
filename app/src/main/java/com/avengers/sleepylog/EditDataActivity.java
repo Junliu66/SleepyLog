@@ -161,6 +161,7 @@ public class EditDataActivity extends AppCompatActivity
      */
     public void  setDefaultDate() {
         date_l = Calendar.getInstance().getTime().getTime();
+        String dateStr = DateFormat.getDateInstance().format(date);
     }
 
     /**
@@ -437,18 +438,17 @@ public class EditDataActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_main) {
+            Intent newAct = new Intent(this, MainActivity.class);
+            startActivity(newAct);
+        } else if (id == R.id.nav_edit_data) {
+            // Do nothing
+        } else if (id == R.id.nav_display_data) {
+            Intent newAct = new Intent(this, DisplayDataActivity.class);
+            startActivity(newAct);
+        } else if (id == R.id.nav_help) {
+            Intent newAct = new Intent(this, NewHelpActivity.class);
+            startActivity(newAct);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

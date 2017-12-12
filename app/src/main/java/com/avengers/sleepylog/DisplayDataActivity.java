@@ -1,6 +1,7 @@
 package com.avengers.sleepylog;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -241,19 +242,19 @@ public class DisplayDataActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_main) {
+            Intent newAct = new Intent(this, MainActivity.class);
+            startActivity(newAct);
+        } else if (id == R.id.nav_edit_data) {
+            Intent newAct = new Intent(this, EditDataActivity.class);
+            startActivity(newAct);
+        } else if (id == R.id.nav_display_data) {
+            // Do nothing
+        } else if (id == R.id.nav_help) {
+            Intent newAct = new Intent(this, NewHelpActivity.class);
+            startActivity(newAct);
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

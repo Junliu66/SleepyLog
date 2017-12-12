@@ -55,15 +55,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HelpActivity"
-            android:label="HelpActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.HELPACTIVITY" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:name=".NewHelpActivity"
+            android:label="@string/title_activity_new_help"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

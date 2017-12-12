@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -188,10 +184,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void onDisplayDataButton(View view) {
-        Intent intent = new Intent(this,DisplayDataActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -246,14 +238,18 @@ public class MainActivity extends AppCompatActivity
         Intent newActivity;
         int id = item.getItemId();
 
-        if (id == R.id.nav_edit_data) {
+        if (id == R.id.nav_main) {
+
+        } else if (id == R.id.nav_main) {
+            // Do nothing
+        } else if (id == R.id.nav_edit_data) {
             Intent newAct = new Intent(this, EditDataActivity.class);
             startActivity(newAct);
         } else if (id == R.id.nav_display_data) {
             Intent newAct = new Intent(this, DisplayDataActivity.class);
             startActivity(newAct);
         } else if (id == R.id.nav_help) {
-            Intent newAct = new Intent(this, HelpActivity.class);
+            Intent newAct = new Intent(this, NewHelpActivity.class);
             startActivity(newAct);
         }
 
