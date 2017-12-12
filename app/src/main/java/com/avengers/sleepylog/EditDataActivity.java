@@ -17,7 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -66,6 +68,8 @@ public class EditDataActivity extends AppCompatActivity
     TextView tvTimeInBed;
     TextView tvSleepEfficiency;
 
+    Spinner spnSleepQuality;
+
     private DBAdapter DBAgent;
     TextView tvDisplayTest;
 
@@ -112,6 +116,21 @@ public class EditDataActivity extends AppCompatActivity
         tvSleepTime = (TextView) findViewById(R.id.tvSleepTime);
         tvTimeInBed = (TextView) findViewById(R.id.tvTimeinBed);
         tvSleepEfficiency = (TextView) findViewById(R.id.tvSleepEfficiency);
+
+        spnSleepQuality = (Spinner)findViewById(R.id.spinnerSleepQuality);
+        spnSleepQuality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                quality = position+1;
+                tvQuality.setText("qual: " + String.valueOf(quality));
+                spnSleepQuality.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         times_l = new long[4];
         times = new Date[4];
@@ -161,7 +180,7 @@ public class EditDataActivity extends AppCompatActivity
      */
     public void  setDefaultDate() {
         date_l = Calendar.getInstance().getTime().getTime();
-        String dateStr = DateFormat.getDateInstance().format(date);
+        date = new Date(date_l);
     }
 
     /**
@@ -215,6 +234,7 @@ public class EditDataActivity extends AppCompatActivity
         total_time_asleep = new Date(total_time_asleep_l);
 
         sleep_efficiency = (float) total_time_asleep_l/total_time_in_bed_l;
+        naps = (nap_duration != 0);
 
     }
 
@@ -273,6 +293,7 @@ public class EditDataActivity extends AppCompatActivity
     }
 
     public void onClickSleepQuality(View view) {
+        spnSleepQuality.setVisibility(View.VISIBLE);
 
     }
 
@@ -305,6 +326,9 @@ public class EditDataActivity extends AppCompatActivity
             long duration_in_ms = ((hourOfDay * 60) + minute) * 60 * 1000;
             this.durations_l[timePickerIdx - 4] = duration_in_ms;
             this.durations[timePickerIdx - 4] = new Date(duration_in_ms);
+        }
+        if (timePickerIdx == 6) {
+            naps = (this.durations_l[2] != 0);
         }
         calculateData();
         displayData();
