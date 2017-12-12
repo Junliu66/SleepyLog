@@ -20,7 +20,7 @@
     <string name="back">Вернуться</string>
     <string name="done">Готово</string>
     <string name="welcome_msg">Добро пожаловать в "Сонный Журнал"</string>
-    <string name="time_to_bed">Время укладываться в кровать</string>
+    <string name="time_to_bed">Время в кровать</string>
     <string name="time_to_wake">Время просыпаться</string>
     <string name="time_to_sleep">Время ложиться спать</string>
     <string name="time_out_of_bed">Время вставать</string>
@@ -29,7 +29,7 @@
 
     <string name="sleep_quality_prompt">Выберите страну</string>
     <string name="set_time">Ввести время</string>
-    <string name="question1">1. Сколько времени ппрошло перед тем как вы заснули?</string>
+    <string name="question1">1. Сколько времени прошло перед тем как вы заснули?</string>
     <string name="question2">2. Если вы просыпались в течении ночи, как долго вы не спали?</string>
     <string name="quetion3">3. Спали ли вы вчера днём?</string>
     <string name="yes">Да</string>
@@ -42,14 +42,22 @@
     <string name="sleep_quality">Качество сна</string>
     <string name="naps">Сон днём</string>
     <string name="any_naps_taken">Спали днём?</string>
-    <string name="length_of_naps">Продолжительность дневного сна</string>
-    <string name="length_of_awakenings">Продолжительность пробуждений</string>
+    <string name="length_of_naps">дневной сон</string>
+    <string name="time_awake">Время Пробуждения</string>
+    <string name="length_of_awakenings">Пробуждения</string>
     <string name="time_to_fall_asleep">Время чтобы заснуть</string>
     <string name="date">Дата</string>
     <string name="enter_data_in_db">Ввести инфо в ДБ</string>
     <string name="pick_a_date">Выбрать дату</string>
     <string name="please_choose_the_date">Выберите дату:</string>
-    <string name="already_in_db">Date is already in bd</string>
+    <string name="already_in_db">Дата уже в базе</string>
+    <string name="print_db">Датaбаза</string>
+    <string name="clear">Очистить</string>
+    <string name="date_picked">выбраная датa</string>
+    <string name="home">Домой</string>
+    <string name="edit_data">Редактирование данных</string>
+    <string name="display_data"> данные</string>
+    <string name="help">Помощь</string>
 
     <string-array name="sleep_quality_array">
         <item>1 (плохое)</item>

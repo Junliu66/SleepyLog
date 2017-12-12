@@ -20,7 +20,7 @@ public final class DBAdapter extends AppCompatActivity {
 
     private static final String DATABASE_NAME = "MYDB";
     private static final String DATABASE_TABLE = "MYDBTABLE";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private static final String KEY_DATE = "date";
     private static final String KEY_TIME_TO_BED = "time_to_bed";
@@ -108,14 +108,14 @@ public final class DBAdapter extends AppCompatActivity {
     public Cursor getAll() {
         Cursor cursor = db.query(true, DATABASE_TABLE, ALL_KEYS, null,
                 null, null, null, null, null);
-        if (cursor.getCount() > 0) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
         }
         return cursor;
     }
 
     public Cursor getRowByPrimaryKey(String date){
-        String whereStr = " date = "+ date;
+        String whereStr = " date = '" + date + "'";
         ///SELECT * FROM Person WHERE Name = 'B';
         Cursor cursor = db.query(DATABASE_TABLE, ALL_KEYS, whereStr, null, null, null, null, null);
         return cursor;
@@ -124,7 +124,7 @@ public final class DBAdapter extends AppCompatActivity {
     public boolean checkIfRowExists(String date){
         String whereStr = " date = "+ date;
         Cursor cursor = db.query(DATABASE_TABLE, ALL_KEYS, whereStr, null, null, null, null, null);
-        return (cursor.getCount() > 0);
+        return (cursor != null && cursor.getCount() > 0);
     }
 
     public boolean deleteRow(long rowId){
@@ -135,7 +135,7 @@ public final class DBAdapter extends AppCompatActivity {
     public void deleteAll() {
         Cursor cursor = getAll();
         int rowIdX = cursor.getColumnIndexOrThrow(KEY_DATE);
-        if (cursor.getCount() > 0) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
                 deleteRow(cursor.getLong(rowIdX));
